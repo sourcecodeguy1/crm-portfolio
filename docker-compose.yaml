@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  mysql-personal:
+    image: mysql:8.0
+    container_name: mysql-personal
+    restart: unless-stopped
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: crm
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+    volumes:
+      - mysql-personal-data:/var/lib/mysql
+
+volumes:
+  mysql-personal-data:
