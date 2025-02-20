@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "http://api.crm-portfolio.test",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
