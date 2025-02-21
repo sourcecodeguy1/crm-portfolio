@@ -282,15 +282,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/common@npm:^19.1.0":
-  version: 19.1.6
-  resolution: "@angular/common@npm:19.1.6"
+"@angular/common@npm:^19.1.7":
+  version: 19.1.7
+  resolution: "@angular/common@npm:19.1.7"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/core": 19.1.6
+    "@angular/core": 19.1.7
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: 10c0/22db830fd2ba72cf8ef431515bfdc12b36ce8202bd0e1cb049a8516fa09a349d7d02f345c0ca2996427c7141d2aaaa1dbcca2417a3acb97d50c4eb2ea2edd00a
+  checksum: 10c0/59dbc2779ddeccc13931f491ab7b3e2d08706300e6aaf7ad0f75c4a9b71cdd45052e42d5c398925798305cc36b45d744eeaf3e248864d5260ef586e580719084
   languageName: node
   linkType: hard
 
@@ -343,17 +343,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/forms@npm:^19.1.0":
-  version: 19.1.6
-  resolution: "@angular/forms@npm:19.1.6"
+"@angular/forms@npm:^19.1.7":
+  version: 19.1.7
+  resolution: "@angular/forms@npm:19.1.7"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/common": 19.1.6
-    "@angular/core": 19.1.6
-    "@angular/platform-browser": 19.1.6
+    "@angular/common": 19.1.7
+    "@angular/core": 19.1.7
+    "@angular/platform-browser": 19.1.7
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: 10c0/d35eecc3242f91d6e7323f1761de1e6968aae0f50868d368eb8574222373fa2d963f462f18561264cde617546f55dca98b5061ecfb4b23118e6ff4507d7854d3
+  checksum: 10c0/c61e04e5b7f0d69491161f9d7ebac7be50b69baf0ea2073613176d13e0247adbe3f6b5cfb31ce01927d59e23f6c2d2da5a34a91d5b33df0f4bafce95b917c159
   languageName: node
   linkType: hard
 
@@ -387,17 +387,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/router@npm:^19.1.0":
-  version: 19.1.6
-  resolution: "@angular/router@npm:19.1.6"
+"@angular/router@npm:^19.1.7":
+  version: 19.1.7
+  resolution: "@angular/router@npm:19.1.7"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/common": 19.1.6
-    "@angular/core": 19.1.6
-    "@angular/platform-browser": 19.1.6
+    "@angular/common": 19.1.7
+    "@angular/core": 19.1.7
+    "@angular/platform-browser": 19.1.7
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: 10c0/54a252c42455a79798f1f6ed88b5ce366ca31601613a81d9798d9105ffc6f8951f618b3bb272d7c475ac1ae539677683b226d5d7f1f1767c60a71de44cecdc7e
+  checksum: 10c0/4deb973c08bf624964c8ad5e3ea29ccf8885797bc9b8cf03d071df4367ec07def5445fa655a36c6bd4004fd6d8982e24ba9b1643c87411a223bce9ad174b634d
   languageName: node
   linkType: hard
 
@@ -2687,6 +2687,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@popperjs/core@npm:^2.9.2":
+  version: 2.11.8
+  resolution: "@popperjs/core@npm:2.11.8"
+  checksum: 10c0/4681e682abc006d25eb380d0cf3efc7557043f53b6aea7a5057d0d1e7df849a00e281cd8ea79c902a35a414d7919621fc2ba293ecec05f413598e0b23d5a1e63
+  languageName: node
+  linkType: hard
+
 "@rollup/rollup-android-arm-eabi@npm:4.30.1":
   version: 4.30.1
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.30.1"
@@ -3085,6 +3092,15 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/eebedbca185ac3c39dd5992ef18d9e2a9f99e7f3c2f52f5561f90e9ed482c5d224c7962db95362712f580ed5713264e777a98d8f0bd8747f4eadf62937baed16
+  languageName: node
+  linkType: hard
+
+"@types/bootstrap@npm:^5":
+  version: 5.2.10
+  resolution: "@types/bootstrap@npm:5.2.10"
+  dependencies:
+    "@popperjs/core": "npm:^2.9.2"
+  checksum: 10c0/3e978855eb780df3907e8fe991371dc661c7a8c5b9852a10e33bcf6a909bc1481857aa8786d18b3aa828fb28660145fda0c8648265719e8a97a448b9f0158eae
   languageName: node
   linkType: hard
 
@@ -4038,6 +4054,15 @@ __metadata:
   version: 1.0.0
   resolution: "boolbase@npm:1.0.0"
   checksum: 10c0/e4b53deb4f2b85c52be0e21a273f2045c7b6a6ea002b0e139c744cb6f95e9ec044439a52883b0d74dedd1ff3da55ed140cfdddfed7fb0cccbed373de5dce1bcf
+  languageName: node
+  linkType: hard
+
+"bootstrap@npm:^5.3.3":
+  version: 5.3.3
+  resolution: "bootstrap@npm:5.3.3"
+  peerDependencies:
+    "@popperjs/core": ^2.11.8
+  checksum: 10c0/bb68ca7b763977b9cce40cb5b8c676ae19a716d2f5d15009fa7bdbcec9dea426968e3cb748fbed7592fbf10edd7c749aea841c2920996a7c1aa5e0a6e2d4c2ad
   languageName: node
   linkType: hard
 
@@ -9358,16 +9383,18 @@ __metadata:
     "@angular-devkit/build-angular": "npm:^19.1.6"
     "@angular/animations": "npm:^19.1.0"
     "@angular/cli": "npm:^19.1.6"
-    "@angular/common": "npm:^19.1.0"
+    "@angular/common": "npm:^19.1.7"
     "@angular/compiler": "npm:^19.1.0"
     "@angular/compiler-cli": "npm:^19.1.0"
     "@angular/core": "npm:^19.1.0"
-    "@angular/forms": "npm:^19.1.0"
+    "@angular/forms": "npm:^19.1.7"
     "@angular/platform-browser": "npm:^19.1.0"
     "@angular/platform-browser-dynamic": "npm:^19.1.0"
-    "@angular/router": "npm:^19.1.0"
+    "@angular/router": "npm:^19.1.7"
+    "@types/bootstrap": "npm:^5"
     "@types/jasmine": "npm:~5.1.0"
     "@yarnpkg/sdks": "npm:^3.2.0"
+    bootstrap: "npm:^5.3.3"
     jasmine-core: "npm:~5.5.0"
     karma: "npm:~6.4.0"
     karma-chrome-launcher: "npm:~3.2.0"
