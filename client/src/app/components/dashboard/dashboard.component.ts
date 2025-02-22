@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {AsyncPipe, DatePipe} from '@angular/common';
 import { User } from '../../interfaces/user.interface';
 
@@ -23,7 +23,9 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.getUser().subscribe((user) => (this.user$ = user));
+    this.authService.getUser().subscribe(user => {
+      this.user$ = of(user);
+    });
   }
 
   logout() {
