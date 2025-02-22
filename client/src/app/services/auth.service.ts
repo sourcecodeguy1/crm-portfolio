@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { AuthResponse } from '../interfaces/auth-response.interface';
+import {User} from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,39 +18,44 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   // Register User
-  register(user: { name: string; email: string; password: string; password_confirmation: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, user);
+  register(user: { name: string; email: string; password: string; password_confirmation: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, user);
   }
 
   // Login User
-  login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
-      tap((res: any) => {
-        localStorage.setItem(this.tokenKey, res.token);
-        this.userSubject.next(res.user);
+  login(email: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap((response) => {
+        localStorage.setItem(this.tokenKey, response.token);
+        this.userSubject.next(response.user);
       })
     );
   }
 
   // Get Authenticated User
-  getUser(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/user`, {
+  getUser(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/user`, {
       headers: new HttpHeaders({ Authorization: `Bearer ${this.getToken()}` }),
     }).pipe(
-      tap((user) => this.userSubject.next(user))
+      tap((user: User) => {
+        this.userSubject.next(user);
+      })
     );
   }
 
   // Logout User
-  logout(): void {
-    this.http.post(`${this.apiUrl}/logout`, {}, {
+  logout(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/logout`, {}, {
       headers: new HttpHeaders({ Authorization: `Bearer ${this.getToken()}` }),
-    }).subscribe(() => {
-      localStorage.removeItem(this.tokenKey);
-      this.userSubject.next(null);
-      this.router.navigate(['/login']);
-    });
+    }).pipe(
+      tap(() => {
+        localStorage.removeItem(this.tokenKey);
+        this.userSubject.next(null);
+        this.router.navigate(['/login']);
+      })
+    );
   }
+
 
   // Get Token from Local Storage
   getToken(): string | null {
