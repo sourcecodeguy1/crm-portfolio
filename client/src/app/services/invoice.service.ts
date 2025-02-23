@@ -20,4 +20,13 @@ export class InvoiceService {
   getTotalRevenue(): Observable<number> {
     return this.http.get<number>('/api/total-revenue');
   }
+
+  getInvoiceStatusBreakdown(): Observable<{ paid: number, pending: number, overdue: number }> {
+    return this.http.get<{ paid: number, pending: number, overdue: number }>('/api/status-breakdown');
+  }
+
+  getRevenueOverTime(): Observable<{ dates: string[], revenue: number[] }> {
+    return this.http.get<{ dates: string[], revenue: number[] }>('/api/revenue-over-time');
+  }
+
 }

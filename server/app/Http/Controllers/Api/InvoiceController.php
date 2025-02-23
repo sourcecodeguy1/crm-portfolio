@@ -68,4 +68,27 @@ class InvoiceController extends Controller
     {
         return response()->json(['total_revenue' => Invoice::query()->sum('amount')]);
     }
+
+    public function statusBreakdown(): JsonResponse
+    {
+        return response()->json([
+            'paid' => Invoice::query()->where('status', 'paid')->count(),
+            'pending' => Invoice::query()->where('status', 'pending')->count(),
+            'overdue' => Invoice::query()->where('status', 'overdue')->count(),
+        ]);
+    }
+
+    public function revenueOverTime(): JsonResponse
+    {
+        $revenueData = Invoice::query()->selectRaw('DATE(created_at) as date, SUM(amount) as total')
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->get();
+
+        return response()->json([
+            'dates' => $revenueData->pluck('date'),
+            'revenue' => $revenueData->pluck('total')
+        ]);
+    }
+
 }

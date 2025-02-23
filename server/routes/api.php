@@ -41,4 +41,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/invoices/pending', [InvoiceController::class, 'pending']);
     Route::get('/invoices/total-revenue', [InvoiceController::class, 'totalRevenue']);
 
+    Route::get('/invoices/status-breakdown', [InvoiceController::class, 'statusBreakdown']);
+    Route::get('/invoices/revenue-over-time', [InvoiceController::class, 'revenueOverTime']);
+
+
 });
