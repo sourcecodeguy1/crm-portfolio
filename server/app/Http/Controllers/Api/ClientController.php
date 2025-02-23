@@ -68,4 +68,9 @@ class ClientController extends Controller
         $client->delete();
         return response()->noContent();
     }
+
+    public function count(): JsonResponse
+    {
+        return response()->json(['count' => Client::query()->count()]);
+    }
 }

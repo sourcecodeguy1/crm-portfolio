@@ -53,4 +53,19 @@ class InvoiceController extends Controller
         $invoice->delete();
         return response()->noContent();
     }
+
+    public function count(): JsonResponse
+    {
+        return response()->json(['count' => Invoice::query()->count()]);
+    }
+
+    public function pending(): JsonResponse
+    {
+        return response()->json(['pending' => Invoice::query()->where('status', 'pending')->count()]);
+    }
+
+    public function totalRevenue(): JsonResponse
+    {
+        return response()->json(['total_revenue' => Invoice::query()->sum('amount')]);
+    }
 }

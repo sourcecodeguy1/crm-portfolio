@@ -35,4 +35,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Logout Route
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/clients/count', [ClientController::class, 'count']);
+    Route::get('/invoices/count', [InvoiceController::class, 'count']);
+    Route::get('/invoices/pending', [InvoiceController::class, 'pending']);
+    Route::get('/invoices/total-revenue', [InvoiceController::class, 'totalRevenue']);
+
 });

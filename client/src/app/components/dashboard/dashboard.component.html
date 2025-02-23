@@ -1,15 +1,41 @@
-<div class="container vh-100 d-flex justify-content-center align-items-center">
-  <div class="card p-4 shadow-lg" style="width: 450px;">
-    <h2 class="text-center">Dashboard</h2>
+<div class="container mt-4">
+  <h2><i class="fa-solid fa-house"></i> Dashboard</h2>
 
-    @if (user$ | async; as user) {
-      <p><strong>Name:</strong> {{ user.name }}</p>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Member Since:</strong> {{ user.created_at | date }}</p>
+  <div class="row mt-4">
+    <!-- Total Clients -->
+    <div class="col-md-3">
+      <div class="card shadow-lg p-3 text-center">
+        <h4><i class="fa-solid fa-users text-primary"></i></h4>
+        <h5>Total Clients</h5>
+        <p class="fs-4"><strong>{{ totalClients$ | async }}</strong></p>
+      </div>
+    </div>
 
-      <button (click)="logout()" class="btn btn-danger w-100">Logout</button>
-    } @else {
-      <p>Loading user data...</p>
-    }
+    <!-- Total Invoices -->
+    <div class="col-md-3">
+      <div class="card shadow-lg p-3 text-center">
+        <h4><i class="fa-solid fa-file-invoice-dollar text-success"></i></h4>
+        <h5>Total Invoices</h5>
+        <p class="fs-4"><strong>{{ totalInvoices$ | async }}</strong></p>
+      </div>
+    </div>
+
+    <!-- Pending Invoices -->
+    <div class="col-md-3">
+      <div class="card shadow-lg p-3 text-center">
+        <h4><i class="fa-solid fa-hourglass-half text-warning"></i></h4>
+        <h5>Pending Invoices</h5>
+        <p class="fs-4"><strong>{{ pendingInvoices$ | async }}</strong></p>
+      </div>
+    </div>
+
+    <!-- Total Revenue -->
+    <div class="col-md-3">
+      <div class="card shadow-lg p-3 text-center">
+        <h4><i class="fa-solid fa-sack-dollar text-success"></i></h4>
+        <h5>Total Revenue</h5>
+        <p class="fs-4"><strong>${{ totalRevenue$ | async }}</strong></p>
+      </div>
+    </div>
   </div>
 </div>

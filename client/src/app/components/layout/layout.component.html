@@ -1,19 +1,27 @@
 <div class="d-flex">
   <!-- Sidebar -->
   <nav class="sidebar bg-dark text-white p-3 vh-100">
-    <h4 class="text-center">MyCRM</h4>
+    <h4 class="text-center"><i class="fa-solid fa-chart-line"></i> MyCRM</h4>
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link text-white" routerLink="/dashboard">Dashboard</a>
+        <a class="nav-link text-white" routerLink="/dashboard">
+          <i class="fa-solid fa-house"></i> Dashboard
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" routerLink="/clients">Clients</a>
+        <a class="nav-link text-white" routerLink="/clients">
+          <i class="fa-solid fa-users"></i> Clients
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" routerLink="/invoices">Invoices</a>
+        <a class="nav-link text-white" routerLink="/invoices">
+          <i class="fa-solid fa-file-invoice-dollar"></i> Invoices
+        </a>
       </li>
       <li class="nav-item mt-3">
-        <button class="btn btn-danger w-100" (click)="logout()">Logout</button>
+        <button class="btn btn-danger w-100" (click)="logout()">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
       </li>
     </ul>
   </nav>
