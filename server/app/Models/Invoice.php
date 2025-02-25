@@ -12,8 +12,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereDueDate($value)
+ * @method static int count()
+ * @method static float sum(string $column)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice where(string $column, mixed $operator = null, mixed $value = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice selectRaw(string $expression, array $bindings = [])
  */
-
 
 class Invoice extends Model
 {

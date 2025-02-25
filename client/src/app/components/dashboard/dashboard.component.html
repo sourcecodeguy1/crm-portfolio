@@ -7,7 +7,11 @@
       <div class="card shadow-lg p-3 text-center">
         <h4><i class="fa-solid fa-users text-primary"></i></h4>
         <h5>Total Clients</h5>
-        <p class="fs-4"><strong>{{ totalClients$ | async }}</strong></p>
+        @if (totalClients$ | async; as count) {
+          <p class="fs-4"><strong>{{ count }}</strong></p>
+        } @else {
+          <p class="fs-4"><i class="fas fa-spinner fa-spin"></i></p>
+        }
       </div>
     </div>
 
@@ -16,7 +20,11 @@
       <div class="card shadow-lg p-3 text-center">
         <h4><i class="fa-solid fa-file-invoice-dollar text-success"></i></h4>
         <h5>Total Invoices</h5>
-        <p class="fs-4"><strong>{{ totalInvoices$ | async }}</strong></p>
+        @if (totalInvoices$ | async; as count) {
+          <p class="fs-4"><strong>{{ count }}</strong></p>
+        } @else {
+          <p class="fs-4"><i class="fas fa-spinner fa-spin"></i></p>
+        }
       </div>
     </div>
 
@@ -25,7 +33,11 @@
       <div class="card shadow-lg p-3 text-center">
         <h4><i class="fa-solid fa-hourglass-half text-warning"></i></h4>
         <h5>Pending Invoices</h5>
-        <p class="fs-4"><strong>{{ pendingInvoices$ | async }}</strong></p>
+        @if (pendingInvoices$ | async; as count) {
+          <p class="fs-4"><strong>{{ count }}</strong></p>
+        } @else {
+          <p class="fs-4"><i class="fas fa-spinner fa-spin"></i></p>
+        }
       </div>
     </div>
 
@@ -34,10 +46,16 @@
       <div class="card shadow-lg p-3 text-center">
         <h4><i class="fa-solid fa-sack-dollar text-success"></i></h4>
         <h5>Total Revenue</h5>
-        <p class="fs-4"><strong>${{ totalRevenue$ | async }}</strong></p>
+        @if (totalRevenue$ | async; as revenue) {
+          <p class="fs-4"><strong>{{ revenue | currency:'USD' }}</strong></p>
+        } @else {
+          <p class="fs-4"><i class="fas fa-spinner fa-spin"></i></p>
+        }
+
       </div>
     </div>
   </div>
+
   <!-- Charts Section -->
   <app-charts></app-charts>
 </div>

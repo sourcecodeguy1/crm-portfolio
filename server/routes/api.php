@@ -27,22 +27,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return response()->json($request->user());
     });
 
-    // Clients API (CRUD)
+    // Client routes
+    Route::get('/clients/count', [ClientController::class, 'count']);
     Route::apiResource('clients', ClientController::class);
 
-    // Invoices API (CRUD)
-    Route::apiResource('invoices', InvoiceController::class);
-
-    // Logout Route
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::get('/clients/count', [ClientController::class, 'count']);
+    // Invoice routes
     Route::get('/invoices/count', [InvoiceController::class, 'count']);
     Route::get('/invoices/pending', [InvoiceController::class, 'pending']);
     Route::get('/invoices/total-revenue', [InvoiceController::class, 'totalRevenue']);
 
     Route::get('/invoices/status-breakdown', [InvoiceController::class, 'statusBreakdown']);
     Route::get('/invoices/revenue-over-time', [InvoiceController::class, 'revenueOverTime']);
+    Route::apiResource('invoices', InvoiceController::class);
 
+    // Logout Route
+    Route::post('/logout', [AuthController::class, 'logout']);
 
 });

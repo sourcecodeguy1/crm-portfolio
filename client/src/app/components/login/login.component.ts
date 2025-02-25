@@ -26,16 +26,12 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-
       this.authService.login(email, password).subscribe({
-        next: () => {
-          // Navigate to dashboard on successful login
+        next: (response) => {
+          console.log('Token stored:', localStorage.getItem('auth_token'));
           this.router.navigate(['/dashboard']);
         },
-        error: (error) => {
-          console.error('Login failed:', error);
-          // Handle login error (show message to user, etc.)
-        }
+        error: (error) => console.error('Login error:', error)
       });
     }
   }

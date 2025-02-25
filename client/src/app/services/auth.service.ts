@@ -17,6 +17,11 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  initializeSanctum(): Observable<any> {
+    return this.http.get('/sanctum/csrf-cookie');
+  }
+
+
   // Register User
   register(user: { name: string; email: string; password: string; password_confirmation: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, user);
