@@ -1,0 +1,42 @@
+<div class="container">
+  <h2><i class="fa-solid fa-users"></i> Clients</h2>
+  <button class="btn btn-primary my-3" (click)="addClient()">Add Client</button>
+
+  @if (clients$ | async; as clients) {
+    @if (clients.length > 0) {
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Company</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (client of clients; track client.id) {
+            <tr>
+              <td>{{ client.name }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.phone_number }}</td>
+              <td>{{ client.company }}</td>
+              <td>
+                <button class="btn btn-warning btn-sm" (click)="editClient(client)">Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="deleteClient(client.id)">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="alert alert-info">
+        No clients found. Add a client to get started.
+      </div>
+    }
+  } @else {
+    <div class="alert alert-info">
+      <i class="fas fa-spinner fa-spin me-2"></i> Loading clients...
+    </div>
+  }
+</div>

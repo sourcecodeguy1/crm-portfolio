@@ -1,0 +1,89 @@
+<div class="container">
+  <h2><i class="fa-solid fa-file-invoice-dollar"></i> Invoices</h2>
+  <button class="btn btn-primary my-3" (click)="addInvoice()">Add Invoice</button>
+
+  @if (invoices$ | async; as invoices) {
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Client</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Due Date</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (invoice of invoices.data; track invoice.id) {
+          <tr>
+            <td>{{ invoice.client?.name ?? 'Unknown Client' }}</td>
+            <td>{{ invoice.amount | currency:'USD' }}</td>
+            <td>
+              <span class="badge" [ngClass]="getStatusClass(invoice.status)">
+                {{ invoice.status }}
+              </span>
+            </td>
+            <td>{{ invoice.due_date }}</td>
+            <td>
+              <button class="btn btn-warning btn-sm me-1" (click)="editInvoice(invoice)">Edit</button>
+              <button class="btn btn-danger btn-sm" (click)="deleteInvoice(invoice.id)">Delete</button>
+            </td>
+          </tr>
+        }
+        @if (invoices.data.length === 0) {
+          <tr>
+            <td colspan="5" class="text-center">No invoices found</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        Showing {{ invoices.from }} to {{ invoices.to }} of {{ invoices.total }} invoices
+      </div>
+      <nav aria-label="Invoice pagination">
+        <ul class="pagination">
+          <!-- Previous Page Button -->
+          <li class="page-item" [class.disabled]="invoices.current_page === 1">
+            <button class="page-link" (click)="changePage(invoices.current_page - 1)" [disabled]="invoices.current_page === 1">
+              Previous
+            </button>
+          </li>
+
+          <!-- Page Numbers -->
+          @for (page of getPageNumbers(invoices.last_page); track page) {
+            <li class="page-item" [class.active]="page === invoices.current_page">
+              <button class="page-link" (click)="changePage(page)">{{ page }}</button>
+            </li>
+          }
+
+          <!-- Next Page Button -->
+          <li class="page-item" [class.disabled]="invoices.current_page === invoices.last_page">
+            <button class="page-link" (click)="changePage(invoices.current_page + 1)" [disabled]="invoices.current_page === invoices.last_page">
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Per Page Selector -->
+      <div class="form-inline">
+        <label class="me-2">Per page:</label>
+        <select class="form-select form-select-sm" (change)="changePageSize($event)">
+          <option value="10" [selected]="pageSize === 10">10</option>
+          <option value="25" [selected]="pageSize === 25">25</option>
+          <option value="50" [selected]="pageSize === 50">50</option>
+          <option value="100" [selected]="pageSize === 100">100</option>
+        </select>
+      </div>
+    </div>
+  } @else {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
+</div>

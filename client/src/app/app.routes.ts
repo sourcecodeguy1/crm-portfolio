@@ -5,6 +5,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { LayoutComponent } from './components/layout/layout.component';
+import {ClientsComponent} from './components/clients/clients.component';
+import {InvoicesComponent} from './components/invoices/invoices.component';
 
 export const routes: Routes = [
   {
@@ -12,9 +14,9 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent }
-      /*{ path: 'clients', component: ClientsComponent },
-      { path: 'invoices', component: InvoicesComponent }*/
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'clients', component: ClientsComponent },
+      { path: 'invoices', component: InvoicesComponent }
     ]
   },
   { path: 'login', component: LoginComponent },

@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class InvoiceController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(Invoice::with('client')->get());
+        $perPage = $request->input('per_page', 10);
+        $invoices = Invoice::with('client')->paginate($perPage);
+        return response()->json($invoices);
     }
 
     public function store(Request $request): JsonResponse
