@@ -1,0 +1,74 @@
+name: Build, Push & Deploy to Vultr
+
+on:
+  push:
+    branches:
+      - main  # Runs on every push to main
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      # Build & Push Laravel API Image
+      - name: Build & Push CRM API (Laravel)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:latest
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:${{ github.sha }}
+
+      # Build & Push Angular Frontend Image
+      - name: Build & Push CRM Client (Angular)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./client
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:latest
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:${{ github.sha }}
+
+  deploy:
+    name: Deploy to Vultr
+    runs-on: ubuntu-latest
+    needs: build-and-push  # Deploy only after build & push is successful
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH Connection
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VULTR_SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Vultr Server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }} << 'EOF'
+            echo "Pulling latest Docker images..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:latest
+
+            echo "Restarting Docker containers..."
+            cd /path/to/your/docker-compose-directory
+            docker-compose down
+            docker-compose up -d
+
+            echo "Deployment completed!"
+          EOF
