@@ -66,7 +66,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:latest
 
             echo "Restarting Docker containers..."
-            cd /path/to/your/docker-compose-directory
+            cd ${{ secrets.SERVER_DIRECTORY }}
             docker-compose down
             docker-compose up -d
 
