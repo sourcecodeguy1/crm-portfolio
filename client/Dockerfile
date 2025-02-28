@@ -18,7 +18,7 @@ FROM nginx:alpine
 
 # ✅ Copy built Angular app directly to Nginx's serving directory
 COPY --from=build-stage /app/dist/temp-client /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # ✅ Expose port 3002
 EXPOSE 3002
