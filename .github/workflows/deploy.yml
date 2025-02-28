@@ -3,7 +3,7 @@ name: Build, Push & Deploy to Vultr
 on:
   push:
     branches:
-      - main  # Runs on every push to main
+      - master  # Runs on every push to main
   workflow_dispatch: # Allows manual trigger
 
 jobs:
