@@ -6,14 +6,26 @@ WORKDIR /app
 
 # Copy dependency files first (optimizes build caching)
 COPY package.json yarn.lock ./
-RUN corepack enable && yarn set version stable && yarn install
+
+# Use classic node_modules instead of PnP (fixes Angular CLI issues)
+RUN corepack enable && yarn set version stable
+RUN yarn config set nodeLinker node-modules
+
+# Install dependencies
+RUN yarn install
+
+# Ensure Angular CLI is installed locally in the project
+RUN yarn add -D @angular/cli@latest
+
+# Add Angular CLI to PATH
+ENV PATH="/app/node_modules/.bin:$PATH"
 
 # 💡 Copy environment file before the full project (ensures correct API_URL)
 COPY src/environments/environment.prod.ts /app/src/environments/environment.prod.ts
 
-# Copy the entire project and build
+# Copy the entire project and build Angular
 COPY . .
-RUN yarn build --configuration=production
+RUN ng build --configuration=production
 
 # ---------------------------------------
 # 🚀 STAGE 2: Serve with Nginx
@@ -28,10 +40,7 @@ COPY --from=build /app/dist/ /tmp/check/
 RUN ls -la /tmp/check/
 
 # ✅ Correct the COPY command based on actual build output
-# Check if your build is under "crm-client" or "temp-client"
-COPY --from=build /app/dist/crm-client/browser/ /usr/share/nginx/html/
-# Alternative:
-# COPY --from=build /app/dist/temp-client/ /usr/share/nginx/html/
+COPY --from=build /app/dist/temp-client/ /usr/share/nginx/html/
 
 # Add Nginx configuration
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
