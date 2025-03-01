@@ -28,7 +28,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Expose FPM port for CRM-Portfolio API
-EXPOSE 9001
+EXPOSE 9000
 
 # Start PHP-FPM
 CMD ["php-fpm"]
