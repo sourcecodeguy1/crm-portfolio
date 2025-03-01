@@ -1,7 +1,14 @@
 FROM node:22 AS build
 WORKDIR /app
+
+# Copy dependencies
 COPY package.json yarn.lock ./
 RUN corepack enable && yarn set version stable && yarn install
+
+# Copy environment file before building (💡 Ensures correct API URL)
+COPY src/environments/environment.prod.ts /app/src/environments/environment.prod.ts
+
+# Copy full project and build Angular
 COPY . .
 RUN yarn build --configuration=production
 
@@ -14,9 +21,9 @@ RUN mkdir -p /tmp/check
 COPY --from=build /app/dist/ /tmp/check/
 RUN ls -la /tmp/check/
 
-# Copy the built app correctly - adjust this path based on what you see
+# Copy built Angular app to Nginx
 COPY --from=build /app/dist/temp-client/browser/ /usr/share/nginx/html/
-# Or if browser directory contains everything including index.html:
+# If browser directory contains everything, use this instead:
 # COPY --from=build /app/dist/temp-client/ /usr/share/nginx/html/
 
 # Add Nginx configuration
