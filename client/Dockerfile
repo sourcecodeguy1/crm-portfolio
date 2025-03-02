@@ -20,11 +20,12 @@ RUN yarn add -D @angular/cli@latest
 # Add Angular CLI to PATH
 ENV PATH="/app/node_modules/.bin:$PATH"
 
-# 💡 Copy environment file before the full project (ensures correct API_URL)
-COPY src/environments/environment.prod.ts /app/src/environments/environment.prod.ts
-
 # Copy the entire project and build Angular
 COPY . .
+
+# ✅ Copy `public/` directory before build so `env.json` is included
+COPY public/ /app/public/
+
 RUN ng build --configuration=production
 
 # ---------------------------------------
@@ -41,6 +42,9 @@ RUN ls -la /tmp/check/
 
 # ✅ Correct the COPY command based on actual build output
 COPY --from=build /app/dist/temp-client/ /usr/share/nginx/html/
+
+# ✅ Copy public assets (including env.json)
+COPY --from=build /app/public/ /usr/share/nginx/html/assets/
 
 # Add Nginx configuration
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
