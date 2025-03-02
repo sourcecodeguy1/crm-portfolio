@@ -32,7 +32,6 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:latest
-            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:${{ github.sha }}
 
       # Build & Push Angular Frontend Image
       - name: Build & Push CRM Client (Angular)
@@ -42,7 +41,6 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:latest
-            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:${{ github.sha }}
 
   deploy:
     name: Deploy to Vultr

@@ -10,6 +10,7 @@ import {RouterLink} from '@angular/router';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  successMessage: string = '';
 
   constructor(private fb: FormBuilder) {
     this.registerForm = this.fb.group({
@@ -23,7 +24,7 @@ export class RegisterComponent {
   onSubmit() {
     if (this.registerForm.valid) {
       console.log('Register Data:', this.registerForm.value);
-      // Call API here...
+      this.successMessage = 'Registration successful!';
     }
   }
 }
