@@ -25,8 +25,8 @@ COPY . .
 
 # Create placeholder environment files for build process
 RUN mkdir -p /app/src/environments/
-RUN echo "export const environment = { production: true };" > /app/src/environments/environment.prod.ts
-RUN echo "export const environment = { production: false };" > /app/src/environments/environment.ts
+RUN echo "export const environment = { production: true, googleAnalyticsId: '' };" > /app/src/environments/environment.prod.ts
+RUN echo "export const environment = { production: false, googleAnalyticsId: '' };" > /app/src/environments/environment.ts
 
 RUN ng build --configuration=production
 
