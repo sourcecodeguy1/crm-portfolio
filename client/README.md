@@ -1,67 +1,58 @@
-# CRM Portfolio
+# CRM Portfolio - Angular Client
 
-A modern, full-stack Customer Relationship Management system built with Angular and Laravel.
+This is the frontend application for the CRM Portfolio project, built with Angular 19.
 
-## Overview
+## Technology Stack
 
-This CRM Portfolio is a demonstration of a robust, production-ready customer relationship management system that showcases modern web development practices and DevOps techniques.
+- **Framework**: Angular 19+
+- **Styling**: Bootstrap 5
+- **HTTP**: Angular HttpClient with interceptors
+- **Analytics**: Google Analytics integration
+- **Routing**: Angular Router with lazy loading
+- **State Management**: Signal-based reactive state
 
-### Key Features
+## Directory Structure
+```
+client/ ├── src/
+        │ ├── app/ 
+        │ │ ├── components/ # UI components 
+        │ │ ├── interfaces/ # TypeScript interfaces 
+        │ │ ├── interceptors/ # HTTP interceptors 
+        │ │ ├── services/ # Service layer for API calls 
+        │ │ ├── app.component.ts # Root component 
+        │ │ └── app.routes.ts # Application routes 
+        │ ├── assets/ # Static assets 
+        │ │ └── config.json # Runtime configuration 
+        │ └── environments/ # Environment configuration 
+        ├── nginx/ # Nginx configuration for production 
+        └── Dockerfile # Docker configuration
+```
+## Configuration
 
-- **Angular Frontend**: Modern, responsive UI built with Angular 19+
-- **Laravel Backend**: RESTful API powered by Laravel 10+
-- **Docker Containerization**: Microservice architecture with separate containers for frontend and backend
-- **CI/CD Pipeline**: Automated deployment with GitHub Actions
-- **Cloud Hosting**: Deployed on Vultr cloud infrastructure
+This application uses a runtime configuration approach rather than build-time environment files:
 
-## Architecture
-
-The application follows a microservice architecture with clear separation of concerns:
-
-CRM Portfolio ├── client/ - Angular frontend ├── server/ - Laravel API backend └── .github/workflows/ - CI/CD pipeline configuration
-
-### Frontend (Angular)
-
-The client application is built with the latest version of Angular, featuring:
-
-- Component-based architecture
-- Reactive state management
-- Responsive design with Bootstrap
-- Dynamic runtime configuration
-- Google Analytics integration
-
-### Backend (Laravel)
-
-The server API is built with Laravel, providing:
-
-- RESTful API endpoints
-- Authentication using Laravel Sanctum
-- Database migrations and models
-- Comprehensive error handling
-- Environment-based configuration
-
-## Deployment
-
-The application is deployed using a CI/CD pipeline:
-
-1. Code is pushed to GitHub
-2. GitHub Actions builds Docker images for both frontend and backend
-3. Images are pushed to Docker Hub
-4. Deployment to Vultr VPS is triggered automatically
-5. Services are updated with zero downtime
+- `src/assets/config.json` contains environment-specific settings that are loaded at runtime
+- The ConfigService loads this file and provides the configuration to the application
+- This allows for environment-specific configuration without rebuilding the application
 
 ## Development
 
-### Prerequisites
+### Local Development
 
-- Node.js 18+
-- PHP 8.1+
-- Docker and Docker Compose
-- Composer
+```bash
+# Install dependencies
+npm install
 
-### Local Setup
+# Start development server
+ng serve
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/sourcecodeguy1/crm-portfolio.git
-   cd crm-portfolio
+# Production build
+ng build --configuration=production
+
+# Build Docker image
+docker build -t crm-client .
+
+# Run Docker container
+docker run -p 4200:80 crm-client
+```
+
