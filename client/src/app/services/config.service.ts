@@ -20,25 +20,20 @@ export class ConfigService {
 
   // Method to explicitly load the configuration
   loadConfig(): void {
-    console.log('ConfigService: Loading configuration...');
-
     // Use responseType: 'text' to get the raw response
     this.http.get('./assets/config.json', { responseType: 'text' })
       .pipe(
         tap(rawText => {
           try {
-            // Parse the text manually
-            console.log('Raw config response:', rawText);
             const config = JSON.parse(rawText) as EnvironmentModel;
-            console.log('ConfigService: Configuration loaded successfully:', config);
             this.configSignal.set(config);
           } catch (parseError) {
-            console.error('ConfigService: JSON parse error:', parseError);
+            // Silent error in production
           }
         }),
         catchError(error => {
-          console.error('ConfigService: HTTP error loading configuration:', error);
-          return of(''); // Return empty string on error
+          // Silent error in production
+          return of('');
         })
       )
       .subscribe();

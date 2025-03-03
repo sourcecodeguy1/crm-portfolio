@@ -13,4 +13,7 @@ bootstrapApplication(AppComponent, appConfig)
       gaService.initialize();
     }, 1000); // Small delay to ensure everything is loaded
   })
-  .catch(err => console.error('Bootstrap error:', err));
+  .catch(err => {
+    // Keep only critical error logging
+    console.error('Application failed to start');
+  });
