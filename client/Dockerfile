@@ -23,8 +23,10 @@ ENV PATH="/app/node_modules/.bin:$PATH"
 # Copy the entire project and build Angular
 COPY . .
 
-# ✅ Copy `public/` directory before build so `env.json` is included
-COPY public/ /app/public/
+# Create placeholder environment files for build process
+RUN mkdir -p /app/src/environments/
+RUN echo "export const environment = { production: true };" > /app/src/environments/environment.prod.ts
+RUN echo "export const environment = { production: false };" > /app/src/environments/environment.ts
 
 RUN ng build --configuration=production
 
@@ -32,19 +34,12 @@ RUN ng build --configuration=production
 # 🚀 STAGE 2: Serve with Nginx
 # ---------------------------------------
 FROM nginx:alpine
+
 # Remove default Nginx HTML files
 RUN rm -rf /usr/share/nginx/html/*
 
-# Debug: Check Angular build output structure
-RUN mkdir -p /tmp/check
-COPY --from=build /app/dist/ /tmp/check/
-RUN ls -la /tmp/check/
-
-# ✅ Correct the COPY command based on actual build output
+# Copy Angular build output to Nginx
 COPY --from=build /app/dist/temp-client/ /usr/share/nginx/html/
-
-# ✅ Copy public assets (including env.json)
-COPY --from=build /app/public/ /usr/share/nginx/html/assets/
 
 # Add Nginx configuration
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
