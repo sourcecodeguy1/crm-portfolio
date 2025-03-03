@@ -7,8 +7,29 @@ on:
   workflow_dispatch: # Allows manual trigger
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      client_changed: ${{ steps.filter.outputs.client }}
+      server_changed: ${{ steps.filter.outputs.server }}
+      should_deploy: ${{ steps.filter.outputs.client == 'true' || steps.filter.outputs.server == 'true' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            client:
+              - 'client/**'
+            server:
+              - 'server/**'
+
   build-and-push:
     name: Build & Push Docker Images
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.should_deploy == 'true' }}
     runs-on: ubuntu-latest
 
     steps:

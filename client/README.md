@@ -1,59 +1,67 @@
-# TempClient
+# CRM Portfolio
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.6.
+A modern, full-stack Customer Relationship Management system built with Angular and Laravel.
 
-## Development server
+## Overview
 
-To start a local development server, run:
+This CRM Portfolio is a demonstration of a robust, production-ready customer relationship management system that showcases modern web development practices and DevOps techniques.
 
-```bash
-ng serve
-```
+### Key Features
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Angular Frontend**: Modern, responsive UI built with Angular 19+
+- **Laravel Backend**: RESTful API powered by Laravel 10+
+- **Docker Containerization**: Microservice architecture with separate containers for frontend and backend
+- **CI/CD Pipeline**: Automated deployment with GitHub Actions
+- **Cloud Hosting**: Deployed on Vultr cloud infrastructure
 
-## Code scaffolding
+## Architecture
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The application follows a microservice architecture with clear separation of concerns:
 
-```bash
-ng generate component component-name
-```
+CRM Portfolio ├── client/ - Angular frontend ├── server/ - Laravel API backend └── .github/workflows/ - CI/CD pipeline configuration
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Frontend (Angular)
 
-```bash
-ng generate --help
-```
+The client application is built with the latest version of Angular, featuring:
 
-## Building
+- Component-based architecture
+- Reactive state management
+- Responsive design with Bootstrap
+- Dynamic runtime configuration
+- Google Analytics integration
 
-To build the project run:
+### Backend (Laravel)
 
-```bash
-ng build
-```
+The server API is built with Laravel, providing:
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- RESTful API endpoints
+- Authentication using Laravel Sanctum
+- Database migrations and models
+- Comprehensive error handling
+- Environment-based configuration
 
-## Running unit tests
+## Deployment
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+The application is deployed using a CI/CD pipeline:
 
-```bash
-ng test
-```
+1. Code is pushed to GitHub
+2. GitHub Actions builds Docker images for both frontend and backend
+3. Images are pushed to Docker Hub
+4. Deployment to Vultr VPS is triggered automatically
+5. Services are updated with zero downtime
 
-## Running end-to-end tests
+## Development
 
-For end-to-end (e2e) testing, run:
+### Prerequisites
 
-```bash
-ng e2e
-```
+- Node.js 18+
+- PHP 8.1+
+- Docker and Docker Compose
+- Composer
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Local Setup
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sourcecodeguy1/crm-portfolio.git
+   cd crm-portfolio
