@@ -41,6 +41,9 @@ RUN rm -rf /usr/share/nginx/html/*
 # Copy Angular build output to Nginx
 COPY --from=build /app/dist/temp-client/ /usr/share/nginx/html/
 
+# Copy public assets (including config.json)
+COPY --from=build /app/public/ /usr/share/nginx/html/assets/
+
 # Add Nginx configuration
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 

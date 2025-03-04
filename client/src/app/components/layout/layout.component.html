@@ -1,20 +1,34 @@
-<div class="d-flex">
+<div class="d-flex position-relative">
+  <!-- Toggle Button for mobile -->
+  <button class="d-md-none btn btn-dark position-fixed toggle-btn"
+          (click)="toggleSidebar()"
+          style="z-index: 1030; top: 10px; left: 10px;">
+    <i class="fa-solid" [ngClass]="isSidebarVisible ? 'fa-xmark' : 'fa-bars'"></i>
+  </button>
+
   <!-- Sidebar -->
-  <nav class="sidebar bg-dark text-white p-3 vh-100">
-    <h4 class="text-center"><i class="fa-solid fa-chart-line"></i> MyCRM</h4>
+  <nav class="sidebar bg-dark text-white p-3"
+       [ngClass]="{'sidebar-hidden': !isSidebarVisible}">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="mb-0"><i class="fa-solid fa-chart-line"></i> MyCRM</h4>
+      <button class="d-md-none btn btn-dark border-0" (click)="toggleSidebar()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link text-white" routerLink="/dashboard">
+        <a class="nav-link text-white" routerLink="/dashboard" (click)="closeOnMobile()">
           <i class="fa-solid fa-house"></i> Dashboard
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" routerLink="/clients">
+        <a class="nav-link text-white" routerLink="/clients" (click)="closeOnMobile()">
           <i class="fa-solid fa-users"></i> Clients
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" routerLink="/invoices">
+        <a class="nav-link text-white" routerLink="/invoices" (click)="closeOnMobile()">
           <i class="fa-solid fa-file-invoice-dollar"></i> Invoices
         </a>
       </li>
@@ -27,7 +41,18 @@
   </nav>
 
   <!-- Main Content -->
-  <div class="content p-4 w-100">
-    <router-outlet></router-outlet>
+  <div class="content" [ngClass]="isSidebarVisible ? 'with-sidebar' : 'full-width'">
+    <!-- Desktop Toggle Button in the navbar-like position -->
+    <div class="toggle-container d-none d-md-flex">
+      <button class="btn btn-sm btn-outline-dark toggle-sidebar-btn" (click)="toggleSidebar()">
+        <i class="fa-solid" [ngClass]="isSidebarVisible ? 'fa-angles-left' : 'fa-angles-right'"></i>
+        <span class="ms-1">{{ isSidebarVisible ? 'Hide' : 'Show' }} Sidebar</span>
+      </button>
+    </div>
+
+    <!-- Actual content with padding -->
+    <div class="p-4">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

@@ -64,3 +64,4 @@ coverage/
 
 # IDE/editor stuff
 .vscode/
+src/assets/config.json

@@ -28,7 +28,6 @@ export class LoginComponent {
       const { email, password } = this.loginForm.value;
       this.authService.login(email, password).subscribe({
         next: (response) => {
-          console.log('Token stored:', localStorage.getItem('auth_token'));
           this.router.navigate(['/dashboard']);
         },
         error: (error) => console.error('Login error:', error)

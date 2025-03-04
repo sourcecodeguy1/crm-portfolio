@@ -1,11 +1,50 @@
 .sidebar {
+  transition: transform 1.0s ease;
+  position: relative;
   width: 250px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
+  min-height: 100vh;
+}
+
+.sidebar-hidden {
+  transform: translateX(-100%);
+  position: absolute; /* Takes it out of the flow */
+  z-index: 1000;
+  height: 100%;
 }
 
 .content {
-  margin-left: 250px; /* Sidebar width */
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.full-width {
+  width: 100%;
+  margin-left: 0;
+}
+
+.with-sidebar {
+  width: calc(100% - 250px);
+  margin-left: 25px;
+}
+
+.toggle-btn {
+  transition: all 5.3s ease;
+}
+
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    position: fixed;
+    z-index: 1020;
+    left: 0;
+    top: 0;
+  }
+
+  .sidebar-hidden {
+    transform: translateX(-100%);
+  }
+
+  .content {
+    width: 100%;
+    margin-left: 0;
+  }
 }
