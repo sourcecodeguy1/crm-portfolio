@@ -37,9 +37,17 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, user, { withCredentials: true });
   }
 
+  // Helper to get a cookie by name
+  getCookie(name: string): string | null {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+
   // Login User
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }, { withCredentials: true }).pipe(
+    const xsrfToken = this.getCookie('XSRF-TOKEN');
+    const headers = xsrfToken ? new HttpHeaders({ 'X-XSRF-TOKEN': xsrfToken }) : undefined;
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }, { withCredentials: true, headers }).pipe(
       tap((response) => {
         localStorage.setItem(this.tokenKey, response.token);
         this.userSubject.next(response.user);
