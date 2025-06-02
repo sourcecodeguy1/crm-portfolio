@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {map, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import { Client } from '../interfaces/client.interface';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'

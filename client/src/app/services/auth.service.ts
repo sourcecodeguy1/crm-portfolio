@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthResponse } from '../interfaces/auth-response.interface';
 import {User} from '../interfaces/user.interface';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'

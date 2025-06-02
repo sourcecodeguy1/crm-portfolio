@@ -3,6 +3,7 @@ import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Invoice } from '../interfaces/invoice.interface';
 import {PaginatedResponse} from '../interfaces/paginated-response.interface';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
