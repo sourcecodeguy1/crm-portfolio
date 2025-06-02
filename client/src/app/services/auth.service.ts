@@ -10,12 +10,19 @@ import {User} from '../interfaces/user.interface';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = '/api';
   private tokenKey = 'auth_token';
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private configService: ConfigService
+  ) {}
+
+  get apiUrl() {
+    return this.configService.getConfig().apiUrl;
+  }
 
   initializeSanctum(): Observable<any> {
     return this.http.get('/sanctum/csrf-cookie');

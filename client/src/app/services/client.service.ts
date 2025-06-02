@@ -7,10 +7,11 @@ import { Client } from '../interfaces/client.interface';
   providedIn: 'root'
 })
 export class ClientService {
+  constructor(private http: HttpClient, private configService: ConfigService) {}
 
-  private apiUrl = '/api/clients';
-
-  constructor(private http: HttpClient) { }
+  get apiUrl() {
+    return this.configService.getConfig().apiUrl + '/clients';
+  }
 
   // Get all clients
   getClients(): Observable<Client[]> {

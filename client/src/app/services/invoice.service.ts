@@ -8,9 +8,11 @@ import {PaginatedResponse} from '../interfaces/paginated-response.interface';
   providedIn: 'root'
 })
 export class InvoiceService {
-  private apiUrl = '/api/invoices';
+  constructor(private http: HttpClient, private configService: ConfigService) {}
 
-  constructor(private http: HttpClient) {}
+  get apiUrl() {
+    return this.configService.getConfig().apiUrl + '/invoices';
+  }
 
   // Get all invoices
   getInvoices(): Observable<Invoice[]> {
