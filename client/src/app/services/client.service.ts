@@ -16,18 +16,18 @@ export class ClientService {
 
   // Get all clients
   getClients(): Observable<Client[]> {
-    return this.http.get<Client[]>(this.apiUrl);
+    return this.http.get<Client[]>(this.apiUrl, { withCredentials: true });
   }
 
   // Get the total client count
   getClientCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.apiUrl}/count`)
+    return this.http.get<{ count: number }>(`${this.apiUrl}/count`, { withCredentials: true })
       .pipe(map((response) => response.count));
   }
 
   // Delete a client by ID
   deleteClient(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
 }

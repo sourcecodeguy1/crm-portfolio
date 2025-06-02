@@ -26,18 +26,18 @@ export class AuthService {
   }
 
   initializeSanctum(): Observable<any> {
-    return this.http.get('/sanctum/csrf-cookie');
+    return this.http.get('/sanctum/csrf-cookie', { withCredentials: true });
   }
 
 
   // Register User
   register(user: { name: string; email: string; password: string; password_confirmation: string }): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, user);
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, user, { withCredentials: true });
   }
 
   // Login User
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }, { withCredentials: true }).pipe(
       tap((response) => {
         localStorage.setItem(this.tokenKey, response.token);
         this.userSubject.next(response.user);
@@ -49,6 +49,7 @@ export class AuthService {
   getUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/user`, {
       headers: new HttpHeaders({ Authorization: `Bearer ${this.getToken()}` }),
+      withCredentials: true
     }).pipe(
       tap((user: User) => {
         this.userSubject.next(user);
@@ -58,7 +59,7 @@ export class AuthService {
 
   // Logout User
   logout(): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/logout`, {}, {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/logout`, {}, { withCredentials: true,
       headers: new HttpHeaders({ Authorization: `Bearer ${this.getToken()}` }),
     }).pipe(
       tap(() => {
