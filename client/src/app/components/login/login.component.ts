@@ -26,7 +26,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      this.authService.login(email, password).subscribe({
+      this.authService.loginWithSanctum(email, password).subscribe({
         next: (response) => {
           this.router.navigate(['/dashboard']);
         },
