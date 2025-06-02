@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 import { AuthResponse } from '../interfaces/auth-response.interface';
 import {User} from '../interfaces/user.interface';
 import { ConfigService } from './config.service';
@@ -26,7 +26,9 @@ export class AuthService {
   }
 
   initializeSanctum(): Observable<any> {
-    return this.http.get('/sanctum/csrf-cookie', { withCredentials: true });
+    // Remove trailing /api or /api/ from apiUrl to get the base API domain
+    const baseUrl = this.apiUrl.replace(/\/api\/?$/, '');
+    return this.http.get(`${baseUrl}/sanctum/csrf-cookie`, { withCredentials: true });
   }
 
 
@@ -42,6 +44,13 @@ export class AuthService {
         localStorage.setItem(this.tokenKey, response.token);
         this.userSubject.next(response.user);
       })
+    );
+  }
+
+  // Login with Sanctum CSRF protection
+  loginWithSanctum(email: string, password: string): Observable<AuthResponse> {
+    return this.initializeSanctum().pipe(
+      switchMap(() => this.login(email, password))
     );
   }
 
