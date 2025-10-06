@@ -27,6 +27,7 @@ class ClientSeeder extends Seeder
         $types     = ['St', 'Ave', 'Blvd', 'Rd', 'Dr', 'Ln', 'Way'];
         $cities    = ['Austin', 'Denver', 'Seattle', 'Miami', 'Chicago', 'Boston', 'Portland', 'Phoenix', 'Atlanta', 'Dallas', 'San Jose', 'San Diego', 'Tampa'];
         $states    = ['TX', 'CO', 'WA', 'FL', 'IL', 'MA', 'OR', 'AZ', 'GA', 'CA', 'NY', 'NV', 'VA'];
+        $companies = ['Acme Corp', 'Globex LLC', 'Initech', 'Umbrella Co', 'Soylent Inc', 'Stark Industries', 'Wayne Enterprises', 'Hooli', 'Wonka Industries', 'Gekko & Co'];
 
         for ($i = 1; $i <= 10; $i++) {
             // Random phone like (415) 234-5678
@@ -40,13 +41,15 @@ class ClientSeeder extends Seeder
             $city   = $cities[array_rand($cities)];
             $state  = $states[array_rand($states)];
             $address = "$addrNo $street $type, $city, $state";
+            $company = $companies[array_rand($companies)] . ' - ' . $city;
 
             $client = Client::updateOrCreate(
                 ['email' => "client{$i}@example.com"],
                 [
                     'name' => "Client {$i}",
-                    'phone' => $phone,
-                    'address' => $address,
+                    // Match DB columns: phone_number and company
+                    'phone_number' => $phone,
+                    'company' => $company,
                 ]
             );
 
@@ -70,3 +73,4 @@ class ClientSeeder extends Seeder
         }
     }
 }
+
