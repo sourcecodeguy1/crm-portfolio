@@ -10,8 +10,10 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create 10 fake users
-        User::factory()->count(10)->create();
+        // Create 10 fake users only outside production (avoids Faker requirement in prod images)
+        if (!app()->environment('production')) {
+            User::factory()->count(10)->create();
+        }
 
         // Ensure a deterministic demo user exists (idempotent)
         $pass = env('DEMO_PASSWORD', 'password');
