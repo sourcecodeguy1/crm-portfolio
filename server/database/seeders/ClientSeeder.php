@@ -57,16 +57,16 @@ class ClientSeeder extends Seeder
             for ($j = 1; $j <= 3; $j++) {
                 $amount = 100 * $j + $i; // simple deterministic amount
                 $due = $now->copy()->addDays($i + $j);
+                // Match invoices schema: id, client_id, amount, status, due_date, timestamps
+                // Use a deterministic composite key for idempotency on re-run
                 Invoice::updateOrCreate(
                     [
                         'client_id' => $client->id,
-                        'number' => "INV-{$client->id}-{$j}",
+                        'due_date'  => $due->toDateString(),
+                        'amount'    => $amount,
                     ],
                     [
-                        'amount' => $amount,
-                        'status' => $j % 3 === 0 ? 'paid' : 'pending',
-                        'due_date' => $due,
-                        'notes' => 'Demo invoice (deterministic seed)'
+                        'status' => $j % 3 === 0 ? 'paid' : 'pending'
                     ]
                 );
             }
