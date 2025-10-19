@@ -27,6 +27,15 @@ RUN composer install --no-dev --optimize-autoloader
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Add custom PHP-FPM pool config for better concurrency
+RUN echo '[www]\n\
+pm = dynamic\n\
+pm.max_children = 20\n\
+pm.start_servers = 5\n\
+pm.min_spare_servers = 3\n\
+pm.max_spare_servers = 10\n\
+pm.max_requests = 500' > /usr/local/etc/php-fpm.d/zz-custom.conf
+
 # Expose FPM port for CRM-Portfolio API
 EXPOSE 9000
 
