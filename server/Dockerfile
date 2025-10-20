@@ -1,6 +1,10 @@
 # Use official PHP FPM image
 FROM php:8.3-fpm
 
+# Build-time version (CI will pass APP_VERSION; defaults to 'unknown')
+ARG APP_VERSION=unknown
+ENV APP_VERSION=${APP_VERSION}
+
 # Set working directory
 WORKDIR /var/www/html
 

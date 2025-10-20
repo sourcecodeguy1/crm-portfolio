@@ -36,6 +36,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set APP_VERSION (CalVer+SHA)
+        run: echo "APP_VERSION=$(date +'%Y.%m.%d')+${GITHUB_SHA::7}" >> $GITHUB_ENV
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -51,7 +54,10 @@ jobs:
         with:
           context: ./server
           push: true
+          build-args: |
+            APP_VERSION=${{ env.APP_VERSION }}
           tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:${{ env.APP_VERSION }}
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:latest
 
       # Build & Push Angular Frontend Image
@@ -61,6 +67,7 @@ jobs:
           context: ./client
           push: true
           tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:${{ env.APP_VERSION }}
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:latest
 
   deploy:
@@ -77,17 +84,24 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.VULTR_SSH_PRIVATE_KEY }}
 
-      - name: Deploy to Vultr Server
+      - name: Compute APP_VERSION for deploy
+        run: echo "APP_VERSION=$(date +'%Y.%m.%d')+${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Deploy to Vultr Server (versioned tags)
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }} << 'EOF'
-            echo "Pulling latest Docker images..."
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:latest
+            set -e
+            export SERVER_TAG='${{ env.APP_VERSION }}'
+            export CRM_API_TAG='${{ env.APP_VERSION }}'
+            export CLIENT_TAG='${{ env.APP_VERSION }}'
 
-            echo "Restarting Docker containers..."
+            echo "Pulling versioned Docker images..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:${SERVER_TAG}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:${CLIENT_TAG}
+
+            echo "Bringing up services with versioned tags..."
             cd ${{ secrets.SERVER_DIRECTORY }}
-            docker-compose down
-            docker-compose up -d
+            docker-compose up -d --pull always
 
             echo "Deployment completed!"
           EOF

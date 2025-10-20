@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +21,28 @@ use Illuminate\Support\Facades\Route;
 // Public Routes (No Authentication Required)
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+
+// Health check (DB + cache + version)
+Route::get('/health', function () {
+    // DB check
+    DB::select('select 1');
+
+    // Cache check
+    $cacheKey = 'health_check_ping';
+    Cache::put($cacheKey, 'pong', 5);
+    $cacheOk = Cache::get($cacheKey) === 'pong';
+
+    // Version (from env or config if set)
+    $version = env('APP_VERSION', config('app.version', 'unknown'));
+
+    return response()->json([
+        'ok' => true,
+        'db' => true,
+        'cache' => $cacheOk,
+        'version' => $version,
+        'time' => now()->toIso8601String(),
+    ], 200);
+});
 
 // Protected Routes (Require Authentication)
 Route::middleware(['auth:sanctum'])->group(function () {
