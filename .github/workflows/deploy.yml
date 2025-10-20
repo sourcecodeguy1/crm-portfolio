@@ -36,8 +36,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set APP_VERSION (CalVer+SHA)
-        run: echo "APP_VERSION=$(date +'%Y.%m.%d')+${GITHUB_SHA::7}" >> $GITHUB_ENV
+      - name: Set APP_VERSION (CalVer-SHA, Docker-safe)
+        run: echo "APP_VERSION=$(date +'%Y.%m.%d')-${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -84,8 +84,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.VULTR_SSH_PRIVATE_KEY }}
 
-      - name: Compute APP_VERSION for deploy
-        run: echo "APP_VERSION=$(date +'%Y.%m.%d')+${GITHUB_SHA::7}" >> $GITHUB_ENV
+      - name: Compute APP_VERSION for deploy (CalVer-SHA, Docker-safe)
+        run: echo "APP_VERSION=$(date +'%Y.%m.%d')-${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Deploy to Vultr Server (versioned tags)
         run: |
