@@ -12,7 +12,9 @@ jobs:
     outputs:
       client_changed: ${{ steps.filter.outputs.client }}
       server_changed: ${{ steps.filter.outputs.server }}
-      should_deploy: ${{ steps.filter.outputs.client == 'true' || steps.filter.outputs.server == 'true' }}
+      compose_changed: ${{ steps.filter.outputs.compose }}
+      workflows_changed: ${{ steps.filter.outputs.workflows }}
+      should_deploy: ${{ steps.filter.outputs.client == 'true' || steps.filter.outputs.server == 'true' || steps.filter.outputs.compose == 'true' || steps.filter.outputs.workflows == 'true' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +27,10 @@ jobs:
               - 'client/**'
             server:
               - 'server/**'
+            compose:
+              - 'docker-compose.yaml'
+            workflows:
+              - '.github/workflows/**'
 
   build-and-push:
     name: Build & Push Docker Images
