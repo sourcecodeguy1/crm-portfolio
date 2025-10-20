@@ -97,12 +97,10 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }} << 'EOF'
             set -e
-            export SERVER_TAG='${{ env.APP_VERSION }}'
             export CRM_API_TAG='${{ env.APP_VERSION }}'
             export CLIENT_TAG='${{ env.APP_VERSION }}'
 
             echo "Pulling versioned Docker images..."
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:${SERVER_TAG}
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:${CLIENT_TAG}
 
             echo "Bringing up services with versioned tags..."
