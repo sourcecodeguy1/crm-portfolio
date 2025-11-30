@@ -97,15 +97,17 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }} << 'EOF'
             set -e
+            cd ${{ secrets.SERVER_DIRECTORY }}
+
             export CRM_API_TAG='${{ env.APP_VERSION }}'
             export CRM_CLIENT_TAG='${{ env.APP_VERSION }}'
 
             echo "Pulling versioned Docker images..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:${CRM_CLIENT_TAG}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:${CRM_API_TAG}
 
-            echo "Bringing up services with versioned tags..."
-            cd ${{ secrets.SERVER_DIRECTORY }}
-            docker-compose up -d --pull always
+            echo "Restarting CRM services only..."
+            docker compose up -d crm-api crm-client
 
             echo "Deployment completed!"
           EOF
