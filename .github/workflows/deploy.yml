@@ -105,8 +105,10 @@ jobs:
             export CRM_CLIENT_TAG='${{ env.APP_VERSION }}'
             echo "Pulling CRM Client image..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:${CRM_CLIENT_TAG}
+            echo "Removing any stale containers..."
+            docker rm -f crm_client_container 2>/dev/null || true
             echo "Restarting CRM Client..."
-            docker compose up -d crm-client
+            CRM_CLIENT_TAG=${CRM_CLIENT_TAG} docker compose up -d --force-recreate crm-client
           EOF
 
       - name: Deploy CRM API
@@ -118,9 +120,15 @@ jobs:
             export CRM_API_TAG='${{ env.APP_VERSION }}'
             echo "Pulling CRM API image..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:${CRM_API_TAG}
+            echo "Removing any stale containers..."
+            docker rm -f crm_api_container 2>/dev/null || true
             echo "Restarting CRM API..."
-            docker compose up -d crm-api
+            CRM_API_TAG=${CRM_API_TAG} docker compose up -d --force-recreate crm-api
           EOF
+
+      - name: Cleanup old images
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }} "docker image prune -f"
 
       - name: Deployment Summary
         run: |
