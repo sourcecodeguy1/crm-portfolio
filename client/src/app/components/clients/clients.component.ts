@@ -3,12 +3,14 @@ import { ClientService } from '../../services/client.service';
 import {Observable, of} from 'rxjs';
 import { Client } from '../../interfaces/client.interface';
 import {AsyncPipe} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
   imports: [
-    AsyncPipe
+    AsyncPipe,
+    RouterLink
   ],
   standalone: true
 })

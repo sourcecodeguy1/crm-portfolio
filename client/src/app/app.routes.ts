@@ -6,6 +6,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { LayoutComponent } from './components/layout/layout.component';
 import {ClientsComponent} from './components/clients/clients.component';
+import {ClientDetailComponent} from './components/clients/client-detail/client-detail.component';
 import {InvoicesComponent} from './components/invoices/invoices.component';
 
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'clients', component: ClientsComponent },
+      { path: 'clients/:id', component: ClientDetailComponent },
       { path: 'invoices', component: InvoicesComponent }
     ]
   },

@@ -32,7 +32,7 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    this.authService.getCsrfToken().subscribe(() => {
+    this.authService.initializeSanctum().subscribe(() => {
       if (this.loginForm.valid) {
         const { email, password } = this.loginForm.value;
         this.authService.login(email, password).subscribe({

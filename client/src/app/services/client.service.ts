@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {map, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import { Client } from '../interfaces/client.interface';
+import { ClientDetail } from '../interfaces/client-detail.interface';
 import { ConfigService } from './config.service';
 
 @Injectable({
@@ -23,6 +24,11 @@ export class ClientService {
   getClientCount(): Observable<number> {
     return this.http.get<{ count: number }>(`${this.apiUrl}/count`, { withCredentials: true })
       .pipe(map((response) => response.count));
+  }
+
+  // Get a single client with their invoices
+  getClient(id: number): Observable<ClientDetail> {
+    return this.http.get<ClientDetail>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
   // Delete a client by ID
