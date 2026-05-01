@@ -18,20 +18,41 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['demo@juliowebmaster.com', [Validators.required, Validators.email]],
-      password: ['password', [Validators.required, Validators.minLength(6)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      this.authService.loginWithSanctum(email, password).subscribe({
-        next: (response) => {
-          this.router.navigate(['/dashboard']);
-        },
-        error: (error) => console.error('Login error:', error)
-      });
-    }
+  loginAsDemo() {
+    this.loginForm.setValue({
+      email: 'demo@juliowebmaster.com',
+      password: 'password',
+    });
+    this.onSubmit();
   }
+
+  onSubmit() {
+    this.authService.getCsrfToken().subscribe(() => {
+      if (this.loginForm.valid) {
+        const { email, password } = this.loginForm.value;
+        this.authService.login(email, password).subscribe({
+          next: () => {
+            // Fetch user info after login to confirm authentication
+            this.authService.getUser().subscribe({
+              next: user => {
+                this.router.navigate(['/dashboard']);
+              },
+              error: err => {
+                // Handle error (e.g., show a message)
+                console.error('Failed to fetch user:', err);
+              }
+            });
+          },
+          error: (error) => console.error('Login error:', error)
+        });
+      }
+    });
+  }
+
+
 }

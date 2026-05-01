@@ -16,6 +16,17 @@
       <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">Login</button>
     </form>
 
+    <div class="d-flex align-items-center my-3">
+      <hr class="flex-grow-1">
+      <span class="mx-2 text-muted small">or</span>
+      <hr class="flex-grow-1">
+    </div>
+
+    <button type="button" class="btn btn-outline-secondary w-100" (click)="loginAsDemo()"
+      title="No account needed">
+      Try Demo <span class="badge bg-secondary ms-1">No account needed</span>
+    </button>
+
     <div class="text-center mt-3">
       <small>Don't have an account? <a [routerLink]="['/register']">Register here</a></small>
     </div>
