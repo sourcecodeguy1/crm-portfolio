@@ -127,6 +127,40 @@
     </div>
   </div>
 
+  <!-- Activity Feed -->
+  <div class="card shadow-sm p-3 mt-4">
+    <h6 class="text-muted text-uppercase small mb-3">
+      <i class="fa-solid fa-clock-rotate-left me-1"></i> Recent Activity
+    </h6>
+    @if (activityLog$ | async; as logs) {
+      @if (logs.length > 0) {
+        <ul class="list-unstyled mb-0">
+          @for (log of logs; track log.id) {
+            <li class="d-flex align-items-start gap-2 py-2 border-bottom">
+              <span class="mt-1">
+                @switch (log.type) {
+                  @case ('invoice_created') { <i class="fa-solid fa-file-circle-plus text-success"></i> }
+                  @case ('invoice_paid') { <i class="fa-solid fa-circle-check text-success"></i> }
+                  @case ('invoice_overdue') { <i class="fa-solid fa-triangle-exclamation text-danger"></i> }
+                  @case ('invoice_deleted') { <i class="fa-solid fa-file-circle-xmark text-secondary"></i> }
+                  @case ('client_added') { <i class="fa-solid fa-user-plus text-primary"></i> }
+                  @case ('client_deleted') { <i class="fa-solid fa-user-minus text-secondary"></i> }
+                  @default { <i class="fa-solid fa-circle-info text-muted"></i> }
+                }
+              </span>
+              <span class="flex-grow-1 small">{{ log.description }}</span>
+              <span class="text-muted small text-nowrap">{{ log.created_at | date:'MMM d, h:mm a' }}</span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="text-muted small mb-0">No activity recorded yet.</p>
+      }
+    } @else {
+      <p><i class="fas fa-spinner fa-spin"></i></p>
+    }
+  </div>
+
   <!-- Charts Section -->
   <app-charts></app-charts>
 </div>

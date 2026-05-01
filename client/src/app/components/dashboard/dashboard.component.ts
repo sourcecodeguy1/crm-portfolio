@@ -2,8 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ClientService } from '../../services/client.service';
 import { InvoiceService } from '../../services/invoice.service';
+import { ActivityLogService, ActivityLogEntry } from '../../services/activity-log.service';
 import { Observable, switchMap, catchError, of, take } from 'rxjs';
-import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe, NgClass } from '@angular/common';
 import { User } from '../../interfaces/user.interface';
 import { ChartsComponent } from '../charts/charts.component';
 import { RouterLink } from '@angular/router';
@@ -11,7 +12,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  imports: [AsyncPipe, ChartsComponent, CurrencyPipe, NgClass, RouterLink],
+  imports: [AsyncPipe, ChartsComponent, CurrencyPipe, DatePipe, NgClass, RouterLink],
   standalone: true
 })
 export class DashboardComponent implements OnInit {
@@ -24,10 +25,12 @@ export class DashboardComponent implements OnInit {
   overdueCount$: Observable<{ count: number }>;
   revenueThisMonth$: Observable<{ this_month: number; last_month: number; change_percent: number | null }>;
   topClients$: Observable<{ id: number; name: string; company: string | null; total_revenue: number; invoice_count: number }[]>;
+  activityLog$: Observable<ActivityLogEntry[]>;
 
   private authService = inject(AuthService);
   private clientService = inject(ClientService);
   private invoiceService = inject(InvoiceService);
+  private activityLogService = inject(ActivityLogService);
 
   constructor() {
     this.user$ = this.authService.user$;
@@ -71,6 +74,12 @@ export class DashboardComponent implements OnInit {
     this.topClients$ = this.authService.user$.pipe(
       take(1),
       switchMap(() => this.invoiceService.getTopClients()),
+      catchError(() => of([]))
+    );
+
+    this.activityLog$ = this.authService.user$.pipe(
+      take(1),
+      switchMap(() => this.activityLogService.getRecentActivity()),
       catchError(() => of([]))
     );
   }

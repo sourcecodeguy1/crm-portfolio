@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\ActivityLogController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download']);
     Route::apiResource('invoices', InvoiceController::class)->only(['index', 'show']);
     Route::apiResource('invoices', InvoiceController::class)->except(['index', 'show'])->middleware('admin');
+
+    // Activity log
+    Route::get('/activity-log', [ActivityLogController::class, 'index']);
 
     // Logout Route
     Route::post('/logout', [AuthController::class, 'logout']);

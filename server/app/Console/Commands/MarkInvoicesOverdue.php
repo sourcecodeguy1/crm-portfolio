@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\ActivityLog;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -14,10 +15,21 @@ class MarkInvoicesOverdue extends Command
 
     public function handle(): void
     {
-        $updated = Invoice::where('status', 'pending')
+        $invoices = Invoice::where('status', 'pending')
             ->whereDate('due_date', '<', Carbon::today())
-            ->update(['status' => 'overdue']);
+            ->with('client:id,name')
+            ->get();
 
-        $this->info("Marked {$updated} invoice(s) as overdue.");
+        foreach ($invoices as $invoice) {
+            $invoice->updateQuietly(['status' => 'overdue']);
+            ActivityLog::record(
+                'invoice_overdue',
+                "Invoice #{$invoice->id} for \"{$invoice->client?->name}\" is now overdue.",
+                Invoice::class,
+                $invoice->id
+            );
+        }
+
+        $this->info("Marked {$invoices->count()} invoice(s) as overdue.");
     }
 }
