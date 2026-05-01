@@ -51,22 +51,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return response()->json($request->user());
     });
 
-    // Client routes
+    // Client routes (read-only for all, write for admin only)
     Route::get('/clients/count', [ClientController::class, 'count']);
-    Route::apiResource('clients', ClientController::class);
+    Route::apiResource('clients', ClientController::class)->only(['index', 'show']);
+    Route::apiResource('clients', ClientController::class)->except(['index', 'show'])->middleware('admin');
 
-    // Invoice routes
+    // Invoice routes (read-only for all, write for admin only)
     Route::get('/invoices/count', [InvoiceController::class, 'count']);
     Route::get('/invoices/pending', [InvoiceController::class, 'pending']);
     Route::get('/invoices/total-revenue', [InvoiceController::class, 'totalRevenue']);
-
     Route::get('/invoices/status-breakdown', [InvoiceController::class, 'statusBreakdown']);
     Route::get('/invoices/revenue-over-time', [InvoiceController::class, 'revenueOverTime']);
     Route::get('/invoices/revenue-this-month', [InvoiceController::class, 'revenueThisMonth']);
     Route::get('/invoices/top-clients', [InvoiceController::class, 'topClients']);
     Route::get('/invoices/overdue-count', [InvoiceController::class, 'overdueCount']);
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download']);
-    Route::apiResource('invoices', InvoiceController::class);
+    Route::apiResource('invoices', InvoiceController::class)->only(['index', 'show']);
+    Route::apiResource('invoices', InvoiceController::class)->except(['index', 'show'])->middleware('admin');
 
     // Logout Route
     Route::post('/logout', [AuthController::class, 'logout']);

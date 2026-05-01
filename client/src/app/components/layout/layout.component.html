@@ -33,6 +33,11 @@
         </a>
       </li>
       <li class="nav-item mt-3">
+        @if (isAdmin$ | async) {
+          <span class="badge bg-success w-100 mb-2 py-1">Admin</span>
+        } @else {
+          <span class="badge bg-secondary w-100 mb-2 py-1">Viewer</span>
+        }
         <button class="btn btn-danger w-100" (click)="logout()">
           <i class="fa-solid fa-right-from-bracket"></i> Logout
         </button>

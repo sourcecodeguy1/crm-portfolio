@@ -22,10 +22,16 @@
       <hr class="flex-grow-1">
     </div>
 
-    <button type="button" class="btn btn-outline-secondary w-100" (click)="loginAsDemo()"
-      title="No account needed">
-      Try Demo <span class="badge bg-secondary ms-1">No account needed</span>
-    </button>
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-outline-secondary flex-fill" (click)="loginAsDemo()">
+        <i class="fa-solid fa-eye me-1"></i> Viewer Demo
+        <span class="badge bg-secondary ms-1">Read-only</span>
+      </button>
+      <button type="button" class="btn btn-outline-primary flex-fill" (click)="loginAsAdmin()">
+        <i class="fa-solid fa-user-shield me-1"></i> Admin Demo
+        <span class="badge bg-primary ms-1">Full access</span>
+      </button>
+    </div>
 
     <div class="text-center mt-3">
       <small>Don't have an account? <a [routerLink]="['/register']">Register here</a></small>

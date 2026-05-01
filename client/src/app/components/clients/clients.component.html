@@ -1,6 +1,8 @@
 <div class="container">
   <h2><i class="fa-solid fa-users"></i> Clients</h2>
-  <button class="btn btn-primary my-3" (click)="addClient()">Add Client</button>
+  @if (isAdmin$ | async) {
+    <button class="btn btn-primary my-3" (click)="addClient()">Add Client</button>
+  }
 
   @if (clients$ | async; as clients) {
     @if (clients.length > 0) {
@@ -23,8 +25,10 @@
               <td>{{ client.company }}</td>
               <td>
                 <a [routerLink]="['/clients', client.id]" class="btn btn-info btn-sm me-1">View</a>
-                <button class="btn btn-warning btn-sm me-1" (click)="editClient(client)">Edit</button>
-                <button class="btn btn-danger btn-sm" (click)="deleteClient(client.id)">Delete</button>
+                @if (isAdmin$ | async) {
+                  <button class="btn btn-warning btn-sm me-1" (click)="editClient(client)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteClient(client.id)">Delete</button>
+                }
               </td>
             </tr>
           }

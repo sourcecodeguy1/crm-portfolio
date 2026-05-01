@@ -15,11 +15,17 @@ class UserSeeder extends Seeder
             User::factory()->count(10)->create();
         }
 
-        // Ensure a deterministic demo user exists (idempotent)
+        // Demo viewer account (public-facing)
         $pass = env('DEMO_PASSWORD', 'password');
         User::updateOrCreate(
             ['email' => 'demo@juliowebmaster.com'],
-            ['name' => 'Demo User', 'password' => Hash::make($pass)]
+            ['name' => 'Demo User', 'password' => Hash::make($pass), 'role' => 'viewer']
+        );
+
+        // Admin account
+        User::updateOrCreate(
+            ['email' => 'admin@juliowebmaster.com'],
+            ['name' => 'Admin', 'password' => Hash::make(env('ADMIN_PASSWORD', 'adminpassword')), 'role' => 'admin']
         );
     }
 }

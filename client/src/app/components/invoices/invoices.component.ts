@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, switchMap } from 'rxjs';
+import { Component, OnInit, inject } from '@angular/core';
+import { BehaviorSubject, Observable, switchMap, map } from 'rxjs';
 import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
 import { InvoiceService } from '../../services/invoice.service';
+import { AuthService } from '../../services/auth.service';
 import { PaginatedResponse } from '../../interfaces/paginated-response.interface';
 import { Invoice } from '../../interfaces/invoice.interface';
 
@@ -16,8 +17,12 @@ export class InvoicesComponent implements OnInit {
   pageSize = 10;
   private pageChange = new BehaviorSubject<{page: number, perPage: number}>({page: this.currentPage, perPage: this.pageSize});
   invoices$: Observable<PaginatedResponse<Invoice>>;
+  isAdmin$: Observable<boolean>;
+
+  private authService = inject(AuthService);
 
   constructor(private invoiceService: InvoiceService) {
+    this.isAdmin$ = this.authService.user$.pipe(map(u => u?.role === 'admin'));
     // Create an observable stream that responds to page changes
     this.invoices$ = this.pageChange.pipe(
       switchMap(({page, perPage}) =>

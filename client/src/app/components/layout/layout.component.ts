@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -9,18 +10,21 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./layout.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,   // For ngClass and other common directives
-    RouterOutlet,   // For <router-outlet>
-    RouterLink      // For routerLink directive
+    CommonModule,
+    RouterOutlet,
+    RouterLink
   ]
 })
 export class LayoutComponent implements OnInit {
-  isSidebarVisible = true; // Default to visible
+  isSidebarVisible = true;
+  isAdmin$: Observable<boolean>;
 
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+    this.isAdmin$ = this.authService.user$.pipe(map(u => u?.role === 'admin'));
+  }
 
   ngOnInit(): void {
     // Check if we have a stored sidebar state

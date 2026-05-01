@@ -1,9 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ClientService } from '../../services/client.service';
-import {Observable, of} from 'rxjs';
+import { AuthService } from '../../services/auth.service';
+import { Observable, of, map } from 'rxjs';
 import { Client } from '../../interfaces/client.interface';
-import {AsyncPipe} from '@angular/common';
-import {RouterLink} from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-clients',
@@ -16,11 +17,14 @@ import {RouterLink} from '@angular/router';
 })
 export class ClientsComponent implements OnInit {
   clients$: Observable<Client[]> = of([]);
+  isAdmin$: Observable<boolean>;
 
   private clientService = inject(ClientService);
+  private authService = inject(AuthService);
 
   constructor() {
     this.clients$ = this.clientService.getClients();
+    this.isAdmin$ = this.authService.user$.pipe(map(u => u?.role === 'admin'));
   }
 
   ngOnInit(): void {}

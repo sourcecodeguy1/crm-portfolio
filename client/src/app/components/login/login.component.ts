@@ -31,6 +31,14 @@ export class LoginComponent {
     this.onSubmit();
   }
 
+  loginAsAdmin() {
+    this.loginForm.setValue({
+      email: 'admin@juliowebmaster.com',
+      password: 'adminpassword',
+    });
+    this.onSubmit();
+  }
+
   onSubmit() {
     this.authService.initializeSanctum().subscribe(() => {
       if (this.loginForm.valid) {
