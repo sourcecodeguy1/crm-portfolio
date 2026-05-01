@@ -24,7 +24,7 @@ class MarkInvoicesOverdue extends Command
             $invoice->updateQuietly(['status' => 'overdue']);
             ActivityLog::record(
                 'invoice_overdue',
-                "Invoice #{$invoice->id} for \"{$invoice->client?->name}\" is now overdue.",
+                "Invoice #{$invoice->id} for {$invoice->client?->name} is now overdue.",
                 Invoice::class,
                 $invoice->id
             );

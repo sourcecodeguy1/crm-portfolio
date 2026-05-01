@@ -15,7 +15,7 @@ class InvoiceObserver
         $client = $invoice->client?->name ?? 'Unknown';
         ActivityLog::record(
             'invoice_created',
-            "Invoice #{$invoice->id} created for \"{$client}\" (\${$invoice->amount}).",
+            "Invoice #{$invoice->id} created for {$client} (\${$invoice->amount}).",
             Invoice::class,
             $invoice->id
         );
@@ -31,7 +31,7 @@ class InvoiceObserver
             $client = $invoice->client?->name ?? 'Unknown';
             ActivityLog::record(
                 "invoice_{$status}",
-                "Invoice #{$invoice->id} for \"{$client}\" marked as {$status}.",
+                "Invoice #{$invoice->id} for {$client} marked as {$status}.",
                 Invoice::class,
                 $invoice->id
             );
@@ -46,7 +46,7 @@ class InvoiceObserver
         $client = $invoice->client?->name ?? 'Unknown';
         ActivityLog::record(
             'invoice_deleted',
-            "Invoice #{$invoice->id} for \"{$client}\" was deleted.",
+            "Invoice #{$invoice->id} for {$client} was deleted.",
             Invoice::class,
             $invoice->id
         );

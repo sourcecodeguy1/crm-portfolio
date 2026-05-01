@@ -11,7 +11,7 @@ class ClientObserver
     {
         ActivityLog::record(
             'client_added',
-            "Client \"{$client->name}\" was added.",
+            "Client {$client->name} was added.",
             Client::class,
             $client->id
         );
@@ -21,7 +21,7 @@ class ClientObserver
     {
         ActivityLog::record(
             'client_deleted',
-            "Client \"{$client->name}\" was deleted.",
+            "Client {$client->name} was deleted.",
             Client::class,
             $client->id
         );
