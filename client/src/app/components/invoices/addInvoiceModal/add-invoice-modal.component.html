@@ -9,8 +9,13 @@
           <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <label>Client ID
-            <input class="form-control" formControlName="client_id" type="number" />
+          <label>Client
+            <select class="form-control" formControlName="client_id">
+              <option value="">Select a client</option>
+              @for (client of clients$ | async) {
+                <option [value]="client.id">{{ client.name }} @if (client.company) { ({{ client.company }}) }</option>
+              }
+            </select>
           </label>
           <label>Amount
             <input class="form-control" formControlName="amount" type="number" step="0.01" />
