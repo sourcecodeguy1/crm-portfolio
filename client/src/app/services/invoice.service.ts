@@ -21,15 +21,13 @@ export class InvoiceService {
   }
 
   // Get total invoice count
-  getInvoiceCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.apiUrl}/count`, { withCredentials: true })
-      .pipe(map(response => response.count));
+  getInvoiceCount(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.apiUrl}/count`, { withCredentials: true });
   }
 
   // Get pending invoices count
-  getPendingInvoiceCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.apiUrl}/pending`, { withCredentials: true })
-      .pipe(map(response => response.count));
+  getPendingInvoiceCount(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.apiUrl}/pending`, { withCredentials: true });
   }
 
   // Get total revenue

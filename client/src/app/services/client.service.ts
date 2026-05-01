@@ -21,9 +21,8 @@ export class ClientService {
   }
 
   // Get the total client count
-  getClientCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.apiUrl}/count`, { withCredentials: true })
-      .pipe(map((response) => response.count));
+  getClientCount(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.apiUrl}/count`, { withCredentials: true });
   }
 
   // Get a single client with their invoices

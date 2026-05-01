@@ -17,9 +17,9 @@ import { RouterLink } from '@angular/router';
 export class DashboardComponent implements OnInit {
   user$: Observable<User | null>;
 
-  totalClients$: Observable<number>;
-  totalInvoices$: Observable<number>;
-  pendingInvoices$: Observable<number>;
+  totalClients$: Observable<{ count: number }>;
+  totalInvoices$: Observable<{ count: number }>;
+  pendingInvoices$: Observable<{ count: number }>;
   totalRevenue$: Observable<number>;
   overdueCount$: Observable<{ count: number }>;
   revenueThisMonth$: Observable<{ this_month: number; last_month: number; change_percent: number | null }>;
@@ -35,19 +35,19 @@ export class DashboardComponent implements OnInit {
     this.totalClients$ = this.authService.user$.pipe(
       take(1),
       switchMap(() => this.clientService.getClientCount()),
-      catchError(() => of(0))
+      catchError(() => of({ count: 0 }))
     );
 
     this.totalInvoices$ = this.authService.user$.pipe(
       take(1),
       switchMap(() => this.invoiceService.getInvoiceCount()),
-      catchError(() => of(0))
+      catchError(() => of({ count: 0 }))
     );
 
     this.pendingInvoices$ = this.authService.user$.pipe(
       take(1),
       switchMap(() => this.invoiceService.getPendingInvoiceCount()),
-      catchError(() => of(0))
+      catchError(() => of({ count: 0 }))
     );
 
     this.totalRevenue$ = this.authService.user$.pipe(
