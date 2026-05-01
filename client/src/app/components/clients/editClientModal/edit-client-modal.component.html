@@ -1,0 +1,35 @@
+<!-- Modal Backdrop -->
+<div class="modal-backdrop fade show" (click)="close()"></div>
+
+<!-- Modal Dialog -->
+<div class="modal fade show d-block" tabindex="-1" style="background: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form [formGroup]="clientForm" (ngSubmit)="submit()">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Client</h5>
+          <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label>Name
+            <input class="form-control" formControlName="name" />
+          </label>
+          <label>Email
+            <input class="form-control" formControlName="email" type="email" />
+          </label>
+          <label>Phone Number
+            <input class="form-control" formControlName="phone_number" />
+          </label>
+          <label>Company
+            <input class="form-control" formControlName="company" />
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="clientForm.invalid">Update</button>
+          <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
