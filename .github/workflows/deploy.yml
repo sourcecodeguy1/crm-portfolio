@@ -124,6 +124,8 @@ jobs:
             docker rm -f crm_api_container 2>/dev/null || true
             echo "Restarting CRM API..."
             CRM_API_TAG=${CRM_API_TAG} docker compose up -d --force-recreate crm-api
+            echo "Running database migrations..."
+            docker compose exec -T crm-api php artisan migrate --force
           EOF
 
       - name: Cleanup old images
