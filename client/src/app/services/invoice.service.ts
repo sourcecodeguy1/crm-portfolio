@@ -48,6 +48,14 @@ export class InvoiceService {
     return this.http.get<{ dates: string[], revenue: number[] }>(`${this.apiUrl}/revenue-over-time`, { withCredentials: true });
   }
 
+  // Download invoice as PDF
+  downloadPdf(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${id}/download`, {
+      withCredentials: true,
+      responseType: 'blob',
+    });
+  }
+
   // Delete an invoice by ID
   deleteInvoice(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });

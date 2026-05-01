@@ -25,6 +25,9 @@
             </td>
             <td>{{ invoice.due_date }}</td>
             <td>
+              <button class="btn btn-secondary btn-sm me-1" (click)="downloadInvoice(invoice)">
+                <i class="fa-solid fa-file-pdf me-1"></i>PDF
+              </button>
               <button class="btn btn-warning btn-sm me-1" (click)="editInvoice(invoice)">Edit</button>
               <button class="btn btn-danger btn-sm" (click)="deleteInvoice(invoice.id)">Delete</button>
             </td>

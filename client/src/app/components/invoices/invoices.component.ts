@@ -109,4 +109,15 @@ export class InvoicesComponent implements OnInit {
     // After successful deletion, refresh the current page
     this.loadInvoices();
   }
+
+  downloadInvoice(invoice: Invoice): void {
+    this.invoiceService.downloadPdf(invoice.id).subscribe(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `invoice-${String(invoice.id).padStart(5, '0')}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
 }

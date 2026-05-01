@@ -62,6 +62,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/invoices/status-breakdown', [InvoiceController::class, 'statusBreakdown']);
     Route::get('/invoices/revenue-over-time', [InvoiceController::class, 'revenueOverTime']);
+    Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download']);
     Route::apiResource('invoices', InvoiceController::class);
 
     // Logout Route

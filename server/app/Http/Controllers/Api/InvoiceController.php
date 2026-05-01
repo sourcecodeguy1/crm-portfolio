@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 
 class InvoiceController extends Controller
@@ -94,6 +95,15 @@ class InvoiceController extends Controller
             'dates' => $revenueData->pluck('date'),
             'revenue' => $revenueData->pluck('total')
         ]);
+    }
+
+    public function download(Invoice $invoice): \Illuminate\Http\Response
+    {
+        $invoice->load('client');
+        $pdf = Pdf::loadView('invoices.pdf', ['invoice' => $invoice]);
+        $filename = 'invoice-' . str_pad($invoice->id, 5, '0', STR_PAD_LEFT) . '.pdf';
+
+        return $pdf->download($filename);
     }
 
 }
