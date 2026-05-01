@@ -44,4 +44,12 @@
       <i class="fas fa-spinner fa-spin me-2"></i> Loading clients...
     </div>
   }
+
+  @if (showAddModal) {
+    <app-add-client-modal (clientAdded)="onClientAdded($event)" (closed)="onClientClosed()"></app-add-client-modal>
+  }
+
+  @if (showEditModal && selectedClient) {
+    <app-edit-client-modal [client]="selectedClient" (clientEdited)="onClientUpdated($event)" (closed)="onClientClosed()"></app-edit-client-modal>
+  }
 </div>

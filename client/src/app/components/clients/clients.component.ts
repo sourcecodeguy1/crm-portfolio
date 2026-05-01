@@ -5,19 +5,26 @@ import { Observable, of, map } from 'rxjs';
 import { Client } from '../../interfaces/client.interface';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AddClientModalComponent } from './addClientModal/add-client-modal.component';
+import { EditClientModalComponent } from './editClientModal/edit-client-modal.component';
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
   imports: [
     AsyncPipe,
-    RouterLink
+    RouterLink,
+    AddClientModalComponent,
+    EditClientModalComponent
   ],
   standalone: true
 })
 export class ClientsComponent implements OnInit {
   clients$: Observable<Client[]> = of([]);
   isAdmin$: Observable<boolean>;
+  showAddModal = false;
+  showEditModal = false;
+  selectedClient: Client | null = null;
 
   private clientService = inject(ClientService);
   private authService = inject(AuthService);
@@ -30,16 +37,40 @@ export class ClientsComponent implements OnInit {
   ngOnInit(): void {}
 
   addClient() {
-    // Open a modal or navigate to an add-client form
+    this.showAddModal = true;
   }
 
   editClient(client: Client) {
-    // Open an edit form
+    this.selectedClient = client;
+    this.showEditModal = true;
   }
 
   deleteClient(id: number) {
     this.clientService.deleteClient(id).subscribe(() => {
-      this.clients$ = this.clientService.getClients(); // Refresh list
+      this.clients$ = this.clientService.getClients();
     });
+  }
+
+  onClientAdded(clientData: any) {
+    this.clientService.createClient(clientData).subscribe(() => {
+      this.clients$ = this.clientService.getClients();
+      this.showAddModal = false;
+    });
+  }
+
+  onClientUpdated(clientData: any) {
+    if (this.selectedClient) {
+      this.clientService.updateClient(this.selectedClient.id, clientData).subscribe(() => {
+        this.clients$ = this.clientService.getClients();
+        this.showEditModal = false;
+        this.selectedClient = null;
+      });
+    }
+  }
+
+  onClientClosed() {
+    this.showAddModal = false;
+    this.showEditModal = false;
+    this.selectedClient = null;
   }
 }

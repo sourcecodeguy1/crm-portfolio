@@ -78,7 +78,15 @@ export class InvoiceService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
-  // Add this method to your existing InvoiceService
+  // Create a new invoice
+  createInvoice(invoice: Partial<Invoice>): Observable<Invoice> {
+    return this.http.post<Invoice>(this.apiUrl, invoice, { withCredentials: true });
+  }
+
+  // Update an invoice
+  updateInvoice(id: number, invoice: Partial<Invoice>): Observable<Invoice> {
+    return this.http.put<Invoice>(`${this.apiUrl}/${id}`, invoice, { withCredentials: true });
+  }
 
   getInvoicesPaginated(page: number = 1, perPage: number = 10): Observable<PaginatedResponse<Invoice>> {
     return this.http.get<PaginatedResponse<Invoice>>(

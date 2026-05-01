@@ -93,4 +93,12 @@
       </div>
     </div>
   }
+
+  @if (showAddModal) {
+    <app-add-invoice-modal (invoiceAdded)="onInvoiceAdded($event)" (closed)="onInvoiceClosed()"></app-add-invoice-modal>
+  }
+
+  @if (showEditModal && selectedInvoice) {
+    <app-edit-invoice-modal [invoice]="selectedInvoice" (invoiceEdited)="onInvoiceUpdated($event)" (closed)="onInvoiceClosed()"></app-edit-invoice-modal>
+  }
 </div>

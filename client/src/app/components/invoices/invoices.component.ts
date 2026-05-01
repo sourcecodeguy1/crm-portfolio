@@ -5,12 +5,14 @@ import { InvoiceService } from '../../services/invoice.service';
 import { AuthService } from '../../services/auth.service';
 import { PaginatedResponse } from '../../interfaces/paginated-response.interface';
 import { Invoice } from '../../interfaces/invoice.interface';
+import { AddInvoiceModalComponent } from './addInvoiceModal/add-invoice-modal.component';
+import { EditInvoiceModalComponent } from './editInvoiceModal/edit-invoice-modal.component';
 
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.component.html',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, NgClass]
+  imports: [AsyncPipe, CurrencyPipe, NgClass, AddInvoiceModalComponent, EditInvoiceModalComponent]
 })
 export class InvoicesComponent implements OnInit {
   currentPage = 1;
@@ -18,6 +20,9 @@ export class InvoicesComponent implements OnInit {
   private pageChange = new BehaviorSubject<{page: number, perPage: number}>({page: this.currentPage, perPage: this.pageSize});
   invoices$: Observable<PaginatedResponse<Invoice>>;
   isAdmin$: Observable<boolean>;
+  showAddModal = false;
+  showEditModal = false;
+  selectedInvoice: Invoice | null = null;
 
   private authService = inject(AuthService);
 
@@ -102,17 +107,41 @@ export class InvoicesComponent implements OnInit {
   }
 
   addInvoice(): void {
-    // Implement add invoice functionality
+    this.showAddModal = true;
   }
 
   editInvoice(invoice: Invoice): void {
-    // Implement edit invoice functionality
+    this.selectedInvoice = invoice;
+    this.showEditModal = true;
   }
 
   deleteInvoice(id: number): void {
-    // Implement delete invoice functionality
-    // After successful deletion, refresh the current page
-    this.loadInvoices();
+    this.invoiceService.deleteInvoice(id).subscribe(() => {
+      this.loadInvoices();
+    });
+  }
+
+  onInvoiceAdded(invoiceData: any) {
+    this.invoiceService.createInvoice(invoiceData).subscribe(() => {
+      this.loadInvoices();
+      this.showAddModal = false;
+    });
+  }
+
+  onInvoiceUpdated(invoiceData: any) {
+    if (this.selectedInvoice) {
+      this.invoiceService.updateInvoice(this.selectedInvoice.id, invoiceData).subscribe(() => {
+        this.loadInvoices();
+        this.showEditModal = false;
+        this.selectedInvoice = null;
+      });
+    }
+  }
+
+  onInvoiceClosed() {
+    this.showAddModal = false;
+    this.showEditModal = false;
+    this.selectedInvoice = null;
   }
 
   downloadInvoice(invoice: Invoice): void {
