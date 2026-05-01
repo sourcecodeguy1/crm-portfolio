@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {map, Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import { Observable, of, map } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Client } from '../interfaces/client.interface';
 import { ClientDetail } from '../interfaces/client-detail.interface';
 import { ConfigService } from './config.service';
@@ -13,6 +13,12 @@ export class ClientService {
 
   get apiUrl() {
     return this.configService.getConfig().apiUrl + '/clients';
+  }
+
+  private getCsrfHeaders(): HttpHeaders | undefined {
+    const match = document.cookie.match(new RegExp('(^| )XSRF-TOKEN=([^;]+)'));
+    const xsrfToken = match ? decodeURIComponent(match[2]) : null;
+    return xsrfToken ? new HttpHeaders({ 'X-XSRF-TOKEN': xsrfToken }) : undefined;
   }
 
   // Get all clients
@@ -32,17 +38,17 @@ export class ClientService {
 
   // Create a new client
   createClient(client: Partial<Client>): Observable<Client> {
-    return this.http.post<Client>(this.apiUrl, client, { withCredentials: true });
+    return this.http.post<Client>(this.apiUrl, client, { withCredentials: true, headers: this.getCsrfHeaders() });
   }
 
   // Update a client
   updateClient(id: number, client: Partial<Client>): Observable<Client> {
-    return this.http.put<Client>(`${this.apiUrl}/${id}`, client, { withCredentials: true });
+    return this.http.put<Client>(`${this.apiUrl}/${id}`, client, { withCredentials: true, headers: this.getCsrfHeaders() });
   }
 
   // Delete a client by ID
   deleteClient(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true, headers: this.getCsrfHeaders() });
   }
 
 }

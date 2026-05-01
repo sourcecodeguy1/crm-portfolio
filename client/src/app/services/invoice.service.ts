@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Invoice } from '../interfaces/invoice.interface';
 import {PaginatedResponse} from '../interfaces/paginated-response.interface';
 import { ConfigService } from './config.service';
@@ -13,6 +13,12 @@ export class InvoiceService {
 
   get apiUrl() {
     return this.configService.getConfig().apiUrl + '/invoices';
+  }
+
+  private getCsrfHeaders(): HttpHeaders | undefined {
+    const match = document.cookie.match(new RegExp('(^| )XSRF-TOKEN=([^;]+)'));
+    const xsrfToken = match ? decodeURIComponent(match[2]) : null;
+    return xsrfToken ? new HttpHeaders({ 'X-XSRF-TOKEN': xsrfToken }) : undefined;
   }
 
   // Get all invoices
@@ -75,17 +81,17 @@ export class InvoiceService {
 
   // Delete an invoice by ID
   deleteInvoice(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true, headers: this.getCsrfHeaders() });
   }
 
   // Create a new invoice
   createInvoice(invoice: Partial<Invoice>): Observable<Invoice> {
-    return this.http.post<Invoice>(this.apiUrl, invoice, { withCredentials: true });
+    return this.http.post<Invoice>(this.apiUrl, invoice, { withCredentials: true, headers: this.getCsrfHeaders() });
   }
 
   // Update an invoice
   updateInvoice(id: number, invoice: Partial<Invoice>): Observable<Invoice> {
-    return this.http.put<Invoice>(`${this.apiUrl}/${id}`, invoice, { withCredentials: true });
+    return this.http.put<Invoice>(`${this.apiUrl}/${id}`, invoice, { withCredentials: true, headers: this.getCsrfHeaders() });
   }
 
   getInvoicesPaginated(page: number = 1, perPage: number = 10): Observable<PaginatedResponse<Invoice>> {
