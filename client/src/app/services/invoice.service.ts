@@ -48,6 +48,25 @@ export class InvoiceService {
     return this.http.get<{ dates: string[], revenue: number[] }>(`${this.apiUrl}/revenue-over-time`, { withCredentials: true });
   }
 
+  // Revenue this month vs last month
+  getRevenueThisMonth(): Observable<{ this_month: number; last_month: number; change_percent: number | null }> {
+    return this.http.get<{ this_month: number; last_month: number; change_percent: number | null }>(
+      `${this.apiUrl}/revenue-this-month`, { withCredentials: true }
+    );
+  }
+
+  // Top 5 clients by paid revenue
+  getTopClients(): Observable<{ id: number; name: string; company: string | null; total_revenue: number; invoice_count: number }[]> {
+    return this.http.get<{ id: number; name: string; company: string | null; total_revenue: number; invoice_count: number }[]>(
+      `${this.apiUrl}/top-clients`, { withCredentials: true }
+    );
+  }
+
+  // Overdue invoice count
+  getOverdueCount(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.apiUrl}/overdue-count`, { withCredentials: true });
+  }
+
   // Download invoice as PDF
   downloadPdf(id: number): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/${id}/download`, {

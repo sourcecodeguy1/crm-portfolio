@@ -1,57 +1,128 @@
 <div class="container mt-4">
   <h2><i class="fa-solid fa-house"></i> Dashboard</h2>
 
-  <div class="row mt-4">
-    <!-- Total Clients -->
+  <!-- Row 1: Core KPIs -->
+  <div class="row mt-4 g-3">
     <div class="col-md-3">
-      <div class="card shadow-lg p-3 text-center">
+      <div class="card shadow-sm p-3 text-center h-100">
         <h4><i class="fa-solid fa-users text-primary"></i></h4>
         <h5>Total Clients</h5>
         @if (totalClients$ | async; as count) {
-          <p class="fs-4"><strong>{{ count }}</strong></p>
+          <p class="fs-4 mb-0"><strong>{{ count }}</strong></p>
         } @else {
-          <p class="fs-4"><i class="fas fa-spinner fa-spin"></i></p>
+          <p class="fs-4 mb-0"><i class="fas fa-spinner fa-spin"></i></p>
         }
       </div>
     </div>
 
-    <!-- Total Invoices -->
     <div class="col-md-3">
-      <div class="card shadow-lg p-3 text-center">
+      <div class="card shadow-sm p-3 text-center h-100">
         <h4><i class="fa-solid fa-file-invoice-dollar text-success"></i></h4>
         <h5>Total Invoices</h5>
         @if (totalInvoices$ | async; as count) {
-          <p class="fs-4"><strong>{{ count }}</strong></p>
+          <p class="fs-4 mb-0"><strong>{{ count }}</strong></p>
         } @else {
-          <p class="fs-4"><i class="fas fa-spinner fa-spin"></i></p>
+          <p class="fs-4 mb-0"><i class="fas fa-spinner fa-spin"></i></p>
         }
       </div>
     </div>
 
-    <!-- Pending Invoices -->
     <div class="col-md-3">
-      <div class="card shadow-lg p-3 text-center">
+      <div class="card shadow-sm p-3 text-center h-100">
         <h4><i class="fa-solid fa-hourglass-half text-warning"></i></h4>
         <h5>Pending Invoices</h5>
         @if (pendingInvoices$ | async; as count) {
-          <p class="fs-4"><strong>{{ count }}</strong></p>
+          <p class="fs-4 mb-0"><strong>{{ count }}</strong></p>
+        } @else {
+          <p class="fs-4 mb-0"><i class="fas fa-spinner fa-spin"></i></p>
+        }
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm p-3 text-center h-100">
+        <h4><i class="fa-solid fa-sack-dollar text-success"></i></h4>
+        <h5>Total Revenue</h5>
+        @if (totalRevenue$ | async; as revenue) {
+          <p class="fs-4 mb-0"><strong>{{ revenue | currency:'USD' }}</strong></p>
+        } @else {
+          <p class="fs-4 mb-0"><i class="fas fa-spinner fa-spin"></i></p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: Advanced KPIs -->
+  <div class="row mt-3 g-3">
+    <!-- Revenue This Month -->
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3 h-100">
+        <h6 class="text-muted text-uppercase small mb-2">
+          <i class="fa-solid fa-calendar-day me-1"></i>Revenue This Month
+        </h6>
+        @if (revenueThisMonth$ | async; as r) {
+          <p class="fs-4 fw-bold mb-1">{{ r.this_month | currency:'USD' }}</p>
+          <p class="text-muted small mb-1">Last month: {{ r.last_month | currency:'USD' }}</p>
+          @if (r.change_percent !== null) {
+            <span class="badge" [ngClass]="r.change_percent >= 0 ? 'bg-success' : 'bg-danger'">
+              <i class="fa-solid" [ngClass]="r.change_percent >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down'"></i>
+              {{ r.change_percent >= 0 ? '+' : '' }}{{ r.change_percent }}%
+            </span>
+          } @else {
+            <span class="badge bg-secondary">No prior data</span>
+          }
         } @else {
           <p class="fs-4"><i class="fas fa-spinner fa-spin"></i></p>
         }
       </div>
     </div>
 
-    <!-- Total Revenue -->
-    <div class="col-md-3">
-      <div class="card shadow-lg p-3 text-center">
-        <h4><i class="fa-solid fa-sack-dollar text-success"></i></h4>
-        <h5>Total Revenue</h5>
-        @if (totalRevenue$ | async; as revenue) {
-          <p class="fs-4"><strong>{{ revenue | currency:'USD' }}</strong></p>
+    <!-- Overdue Invoices -->
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3 h-100 text-center">
+        <h6 class="text-muted text-uppercase small mb-2">
+          <i class="fa-solid fa-triangle-exclamation me-1 text-danger"></i>Overdue Invoices
+        </h6>
+        @if (overdueCount$ | async; as result) {
+          <p class="fs-2 fw-bold mb-1" [ngClass]="result.count > 0 ? 'text-danger' : 'text-success'">
+            {{ result.count }}
+          </p>
+          @if (result.count > 0) {
+            <a [routerLink]="['/invoices']" class="btn btn-sm btn-outline-danger">View Overdue</a>
+          } @else {
+            <span class="text-success small"><i class="fa-solid fa-circle-check me-1"></i>All clear!</span>
+          }
         } @else {
           <p class="fs-4"><i class="fas fa-spinner fa-spin"></i></p>
         }
+      </div>
+    </div>
 
+    <!-- Top Clients -->
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3 h-100">
+        <h6 class="text-muted text-uppercase small mb-2">
+          <i class="fa-solid fa-trophy me-1 text-warning"></i>Top Clients by Revenue
+        </h6>
+        @if (topClients$ | async; as clients) {
+          @if (clients.length > 0) {
+            <ul class="list-unstyled mb-0">
+              @for (client of clients; track client.id; let i = $index) {
+                <li class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                  <span>
+                    <span class="text-muted me-2 small">{{ i + 1 }}.</span>
+                    <a [routerLink]="['/clients', client.id]" class="text-decoration-none">{{ client.name }}</a>
+                  </span>
+                  <span class="badge bg-success">{{ client.total_revenue | currency:'USD':'symbol':'1.0-0' }}</span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="text-muted small">No paid invoices yet.</p>
+          }
+        } @else {
+          <p><i class="fas fa-spinner fa-spin"></i></p>
+        }
       </div>
     </div>
   </div>
