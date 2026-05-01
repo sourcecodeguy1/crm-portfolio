@@ -82,7 +82,7 @@ jobs:
     name: Deploy to Vultr
     runs-on: ubuntu-latest
     needs: [check-changes, build-and-push]
-    if: ${{ needs.check-changes.outputs.client_changed == 'true' || needs.check-changes.outputs.server_changed == 'true' }}
+    if: ${{ needs.check-changes.outputs.client_changed == 'true' || needs.check-changes.outputs.server_changed == 'true' || needs.check-changes.outputs.workflows_changed == 'true' }}
 
     steps:
       - name: Checkout Repository
