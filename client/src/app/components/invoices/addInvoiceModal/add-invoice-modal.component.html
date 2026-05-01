@@ -12,7 +12,7 @@
           <label>Client
             <select class="form-control" formControlName="client_id">
               <option value="">Select a client</option>
-              @for (client of clients$ | async) {
+              @for (client of clients$ | async; track client.id) {
                 <option [value]="client.id">{{ client.name }} @if (client.company) { ({{ client.company }}) }</option>
               }
             </select>
