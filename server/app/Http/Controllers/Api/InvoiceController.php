@@ -26,7 +26,7 @@ class InvoiceController extends Controller
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'amount' => 'required|numeric',
-            'status' => 'required|in:pending,paid',
+            'status' => 'required|in:pending,paid,overdue',
             'due_date' => 'required|date',
         ]);
 
@@ -45,7 +45,7 @@ class InvoiceController extends Controller
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'amount' => 'required|numeric',
-            'status' => 'required|in:pending,paid',
+            'status' => 'required|in:pending,paid,overdue',
             'due_date' => 'required|date',
         ]);
 
