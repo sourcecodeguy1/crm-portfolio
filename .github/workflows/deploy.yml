@@ -3,39 +3,12 @@ name: Build, Push & Deploy to Vultr
 on:
   push:
     branches:
-      - master  # Runs on every push to main
-  workflow_dispatch: # Allows manual trigger
+      - master
+  workflow_dispatch:
 
 jobs:
-  check-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      client_changed: ${{ steps.filter.outputs.client }}
-      server_changed: ${{ steps.filter.outputs.server }}
-      compose_changed: ${{ steps.filter.outputs.compose }}
-      workflows_changed: ${{ steps.filter.outputs.workflows }}
-      should_deploy: ${{ steps.filter.outputs.client == 'true' || steps.filter.outputs.server == 'true' || steps.filter.outputs.compose == 'true' || steps.filter.outputs.workflows == 'true' }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            client:
-              - 'client/**'
-            server:
-              - 'server/**'
-            compose:
-              - 'docker-compose.yaml'
-            workflows:
-              - '.github/workflows/**'
-
   test:
     name: Run PHPUnit Tests
-    needs: check-changes
-    if: ${{ needs.check-changes.outputs.server_changed == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -69,15 +42,15 @@ jobs:
 
   build-and-push:
     name: Build & Push Docker Images
-    needs: [check-changes, test]
-    if: ${{ needs.check-changes.outputs.should_deploy == 'true' && (needs.test.result == 'success' || needs.test.result == 'skipped') }}
+    needs: test
+    if: needs.test.result == 'success'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set APP_VERSION (CalVer-SHA, Docker-safe)
+      - name: Set APP_VERSION
         run: echo "APP_VERSION=$(date +'%Y.%m.%d')-${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
@@ -89,9 +62,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      # Build & Push Laravel API Image (only if server changed)
       - name: Build & Push CRM API (Laravel)
-        if: ${{ needs.check-changes.outputs.server_changed == 'true' }}
         uses: docker/build-push-action@v5
         with:
           context: ./server
@@ -102,9 +73,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:${{ env.APP_VERSION }}
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:latest
 
-      # Build & Push Angular Frontend Image (only if client changed)
       - name: Build & Push CRM Client (Angular)
-        if: ${{ needs.check-changes.outputs.client_changed == 'true' }}
         uses: docker/build-push-action@v5
         with:
           context: ./client
@@ -115,9 +84,8 @@ jobs:
 
   deploy:
     name: Deploy to Vultr
+    needs: [build-and-push]
     runs-on: ubuntu-latest
-    needs: [check-changes, build-and-push, test]
-    if: ${{ needs.check-changes.outputs.client_changed == 'true' || needs.check-changes.outputs.server_changed == 'true' || needs.check-changes.outputs.workflows_changed == 'true' }}
 
     steps:
       - name: Checkout Repository
@@ -128,11 +96,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.VULTR_SSH_PRIVATE_KEY }}
 
-      - name: Compute APP_VERSION for deploy (CalVer-SHA, Docker-safe)
+      - name: Compute APP_VERSION for deploy
         run: echo "APP_VERSION=$(date +'%Y.%m.%d')-${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Deploy CRM Client
-        if: ${{ needs.check-changes.outputs.client_changed == 'true' }}
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }} << 'EOF'
             set -e
@@ -147,7 +114,6 @@ jobs:
           EOF
 
       - name: Deploy CRM API
-        if: ${{ needs.check-changes.outputs.server_changed == 'true' }}
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }} << 'EOF'
             set -e
@@ -173,6 +139,4 @@ jobs:
 
       - name: Deployment Summary
         run: |
-          echo "Deployment completed!"
-          echo "Client deployed: ${{ needs.check-changes.outputs.client_changed }}"
-          echo "Server deployed: ${{ needs.check-changes.outputs.server_changed }}"
+          echo "Deployment completed at $(date)"
