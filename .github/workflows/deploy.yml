@@ -108,7 +108,7 @@ jobs:
             echo "Pulling CRM Client image..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}:${CRM_CLIENT_TAG}
             echo "Removing any stale containers..."
-            docker rm -f crm_client_container 2>/dev/null || true
+            docker rm -f crm-client 2>/dev/null || true
             echo "Restarting CRM Client..."
             CRM_CLIENT_TAG=${CRM_CLIENT_TAG} docker compose up -d --force-recreate crm-client
           EOF
@@ -122,15 +122,15 @@ jobs:
             echo "Pulling CRM API image..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }}:${CRM_API_TAG}
             echo "Removing any stale containers..."
-            docker rm -f crm_api_container 2>/dev/null || true
+            docker rm -f crm-api 2>/dev/null || true
             echo "Restarting CRM API..."
             CRM_API_TAG=${CRM_API_TAG} docker compose up -d --force-recreate crm-api
             echo "Waiting for API container to be ready..."
             sleep 10
             echo "Running database migrations..."
-            docker exec crm_api_container php artisan migrate --force
+            docker exec crm-api php artisan migrate --force
             echo "Running database seeders..."
-            docker exec crm_api_container php artisan db:seed --class=UserSeeder --force
+            docker exec crm-api php artisan db:seed --class=UserSeeder --force
           EOF
 
       - name: Cleanup old images
