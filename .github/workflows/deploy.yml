@@ -135,7 +135,12 @@ jobs:
 
       - name: Cleanup old images
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }} "docker image prune -f"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }} "
+            for img in ${{ secrets.DOCKER_USERNAME }}/${{ secrets.SERVER_IMAGE }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CLIENT_IMAGE }}; do
+              docker images \$img --format '{{.Tag}}' | grep -v latest | sort -r | tail -n +3 | xargs -r -I {} docker rmi \$img:{}
+            done
+            docker image prune -f
+          "
 
       - name: Deployment Summary
         run: |
