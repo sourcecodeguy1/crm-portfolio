@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ca180b42295351e875ce80bc9b49264",
+    "content-hash": "bdfe4b65b62086c0eab7f94d0a1e6f74",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -3741,6 +3741,69 @@
                 "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v9.3.0"
             },
             "time": "2026-03-03T17:31:43+00:00"
+        },
+        {
+            "name": "sourcecodeguy1/laravel-mcp-server",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sourcecodeguy1/laravel-mcp-server.git",
+                "reference": "d394d667efaef78ffd92c21c71c021714c69f1d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sourcecodeguy1/laravel-mcp-server/zipball/d394d667efaef78ffd92c21c71c021714c69f1d6",
+                "reference": "d394d667efaef78ffd92c21c71c021714c69f1d6",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^10.0|^11.0|^12.0|^13.0",
+                "illuminate/database": "^10.0|^11.0|^12.0|^13.0",
+                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^10.0|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sourcecodeguy1\\LaravelMcp\\LaravelMcpServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sourcecodeguy1\\LaravelMcp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Julio Sandoval",
+                    "email": "julio.sandoval.engineer@gmail.com",
+                    "homepage": "https://juliowebmaster.com"
+                }
+            ],
+            "description": "MCP server for Laravel — expose routes, schema, models, and migrations to AI agents like Claude",
+            "keywords": [
+                "Devtools",
+                "ai",
+                "claude",
+                "laravel",
+                "mcp",
+                "model-context-protocol"
+            ],
+            "support": {
+                "issues": "https://github.com/sourcecodeguy1/laravel-mcp-server/issues",
+                "source": "https://github.com/sourcecodeguy1/laravel-mcp-server/tree/v1.3.0"
+            },
+            "time": "2026-05-29T21:03:41+00:00"
         },
         {
             "name": "symfony/clock",
