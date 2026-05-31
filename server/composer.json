@@ -9,9 +9,11 @@
         "php": "^8.3",
         "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^11.31",
+        "laravel/pulse": "^1.7",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "sourcecodeguy1/laravel-mcp-server": "^1.0"
+        "sourcecodeguy1/laravel-mcp-server": "^1.0",
+        "sourcecodeguy1/laravel-pulse-mcp": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
